@@ -5,6 +5,7 @@ public class MiniBoardHelper {
 
     public MiniBoardHelper(MiniBoard[] miniBoardHelper){
         this.miniBoards = miniBoardHelper;
+        boardHelperInit();
     }
 
     public MiniBoard[] getMiniBoards(){

@@ -5,7 +5,8 @@ public class MiniBoard {
 
 	public MiniBoard(BoardCell[][] miniBoard){
 		this.miniBoard = miniBoard;
-		initMiniBoard();
+//		initMiniBoard();
+		initMiniBoardRand();
 	}
 
 
@@ -17,6 +18,14 @@ public class MiniBoard {
 		for(int i = 0; i < Constants.MINI_BOARD_SIZE; i++){
 			for(int j = 0; j < Constants.MINI_BOARD_SIZE; j++){
 				this.miniBoard[i][j] = new BoardCell(Constants.EMPTY);
+			}
+		}
+	}
+
+	public void initMiniBoardRand(){
+		for(int i = 0; i < Constants.MINI_BOARD_SIZE; i++){
+			for(int j = 0; j < Constants.MINI_BOARD_SIZE; j++){
+				this.miniBoard[i][j] = new BoardCell((int) (Math.random() * 3 - 1));
 			}
 		}
 	}
