@@ -6,4 +6,5 @@ public class Board {
     public Board(MiniBoard[] board){
         this.board = board;
     }
+
 }
