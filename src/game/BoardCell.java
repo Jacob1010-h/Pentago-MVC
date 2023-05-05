@@ -5,7 +5,7 @@ public class BoardCell{
 	private int value;
 
 	public BoardCell(int value){
-		this.value = value;
+		this.setValue(value);
 	}
 
 	/**

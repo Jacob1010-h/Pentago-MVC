@@ -2,7 +2,21 @@ package game;
 
 public class Rotation {
 
-	public Rotation(){
+	private int rotation;
 
+	public Rotation(){
+		this.rotation = 0;
 	}
+
+	public int getRotation() {
+		return this.rotation;
+	}
+
+	public void setRotation(int r) {
+		this.rotation = r;
+	}
+
+
+
 }
+
