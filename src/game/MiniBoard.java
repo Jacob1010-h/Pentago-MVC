@@ -27,18 +27,15 @@ public class MiniBoard {
 	}
 	public void rotateClockwise() {
 		BoardCell[][] temp = new BoardCell[Constants.MINI_BOARD_SIZE][Constants.MINI_BOARD_SIZE];
-
 		for (int i = 0; i < Constants.MINI_BOARD_SIZE; i++) {
 			System.arraycopy(this.miniBoard[i], 0, temp[i], 0, Constants.MINI_BOARD_SIZE);
 		}
-
 		if (this.rotation.getRotation() == 270) {
 			this.rotation.setRotation(0);
 		}
 		else {
 			this.rotation.setRotation(this.rotation.getRotation() + 90);
 		}
-
 		for (int row = 0; row < Constants.MINI_BOARD_SIZE; row++) {
 			for (int col = 0; col < Constants.MINI_BOARD_SIZE; col++) {
 				this.miniBoard[row][col] = temp[Constants.MINI_BOARD_SIZE - col - 1][row];
@@ -55,6 +52,11 @@ public class MiniBoard {
 		}
 		else {
 			this.rotation.setRotation(this.rotation.getRotation() - 90);
+		}
+		for (int row = 0; row < Constants.MINI_BOARD_SIZE; row++) {
+			for (int col = 0; col < Constants.MINI_BOARD_SIZE; col++) {
+				this.miniBoard[row][col] = temp[col][Constants.MINI_BOARD_SIZE - row - 1];
+			}
 		}
 
 	}
