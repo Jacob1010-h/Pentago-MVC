@@ -1,14 +1,9 @@
 package game;
 
 public class Board {
-    private MiniBoard[] board = new MiniBoard[Constants.MINI_BOARD_AMOUNT];
+    private MiniBoard[] board;
 
-    public Board(MiniBoard[] board, Rotation rotation){
+    public Board(MiniBoard[] board){
         this.board = board;
     }
-
-
-
-
-
 }

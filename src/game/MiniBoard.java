@@ -1,12 +1,11 @@
 package game;
 
 public class MiniBoard {
-	private BoardCell[][] miniBoard = new BoardCell[Constants.MINI_BOARD_SIZE][Constants.MINI_BOARD_SIZE];
-	private Rotation rotation = new Rotation();
+	private BoardCell[][] miniBoard;
 
-	public MiniBoard(BoardCell[][] miniBoard, Rotation rotation){
+	public MiniBoard(BoardCell[][] miniBoard){
 		this.miniBoard = miniBoard;
-		this.rotation = rotation;
+		initMiniBoard();
 	}
 
 
@@ -14,7 +13,7 @@ public class MiniBoard {
 		return miniBoard;
 	}
 
-	public void populateMiniBoard(){
+	public void initMiniBoard(){
 		for(int i = 0; i < Constants.MINI_BOARD_SIZE; i++){
 			for(int j = 0; j < Constants.MINI_BOARD_SIZE; j++){
 				this.miniBoard[i][j] = new BoardCell(Constants.EMPTY);
@@ -25,17 +24,15 @@ public class MiniBoard {
 	public BoardCell getCell(int row, int col) {
 		return this.miniBoard[row][col];
 	}
+
 	public void rotateClockwise() {
+		// create temp board
 		BoardCell[][] temp = new BoardCell[Constants.MINI_BOARD_SIZE][Constants.MINI_BOARD_SIZE];
+		// copy the miniBoard to the temp board
 		for (int i = 0; i < Constants.MINI_BOARD_SIZE; i++) {
 			System.arraycopy(this.miniBoard[i], 0, temp[i], 0, Constants.MINI_BOARD_SIZE);
 		}
-		if (this.rotation.getRotation() == 270) {
-			this.rotation.setRotation(0);
-		}
-		else {
-			this.rotation.setRotation(this.rotation.getRotation() + 90);
-		}
+		// Rotate the values and apply them to miniBoard
 		for (int row = 0; row < Constants.MINI_BOARD_SIZE; row++) {
 			for (int col = 0; col < Constants.MINI_BOARD_SIZE; col++) {
 				this.miniBoard[row][col] = temp[Constants.MINI_BOARD_SIZE - col - 1][row];
@@ -46,19 +43,18 @@ public class MiniBoard {
 	}
 
 	public void rotateCounterClockwise() {
+		// create temp board
 		BoardCell[][] temp = new BoardCell[Constants.MINI_BOARD_SIZE][Constants.MINI_BOARD_SIZE];
-		if (this.rotation.getRotation() == 0) {
-			this.rotation.setRotation(270);
+		// copy the miniBoard to the temp board
+		for (int i = 0; i < Constants.MINI_BOARD_SIZE; i++) {
+			System.arraycopy(this.miniBoard[i], 0, temp[i], 0, Constants.MINI_BOARD_SIZE);
 		}
-		else {
-			this.rotation.setRotation(this.rotation.getRotation() - 90);
-		}
+		// Rotate the values and apply them to miniBoard
 		for (int row = 0; row < Constants.MINI_BOARD_SIZE; row++) {
 			for (int col = 0; col < Constants.MINI_BOARD_SIZE; col++) {
 				this.miniBoard[row][col] = temp[col][Constants.MINI_BOARD_SIZE - row - 1];
 			}
 		}
-
 	}
 
 
