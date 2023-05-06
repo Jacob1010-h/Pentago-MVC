@@ -13,7 +13,7 @@ public class Test {
             Arrays.stream(miniBoardHelper.getMiniBoards()[i].getMiniBoard()).forEach(row -> Arrays.fill(row, new BoardCell(finalI % 2 == 0 ? Constants.BLACK : Constants.WHITE)));
         }
 
-        board.populateBoard(miniBoardHelper);
+        board.copyBoard(miniBoardHelper);
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
             for (int j = 0; j < Constants.BOARD_SIZE; j++) {
                 System.out.print(board.getCell(i, j).getValue() + " ");

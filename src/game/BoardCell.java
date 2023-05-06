@@ -8,6 +8,9 @@ public class BoardCell{
 		this.setValue(value);
 	}
 
+	public BoardCell() {
+	}
+
 	/**
 	 * The function returns the value of an integer.
 	 * 
@@ -27,6 +30,7 @@ public class BoardCell{
 	public void setValue(int value){
 		this.value = value;
 	}
+
 
 	/**
 	 * The function checks if a value is equal to a constant representing empty.
