@@ -56,15 +56,23 @@ public class Board {
     public void copyBoard(MiniBoardHelper miniBoardHelper) {
         MiniBoard[] miniBoards = miniBoardHelper.getMiniBoards();
 
-        for (int i = 0; i < Constants.BOARD_SIZE; i += Constants.MINI_BOARD_SIZE) {
-            for (int j = 0, miniBoardIndex = 0; j < Constants.BOARD_SIZE; j += Constants.MINI_BOARD_SIZE) {
+        // iterate through each mini-board and set the values of the cells on this board to be equal to the values of the cells on the mini-boards
+        // the first mini-board is the top left mini-board, the second mini-board is the top right mini-board, the third mini-board is the bottom left mini-board, and the fourth mini-board is the bottom right mini-board
+        for (int i = 0; i < Constants.MINI_BOARD_AMOUNT; i++) {
+            for (int j = 0; j < Constants.MINI_BOARD_SIZE; j++) {
                 for (int k = 0; k < Constants.MINI_BOARD_SIZE; k++) {
-                    for (int l = 0; l < Constants.MINI_BOARD_SIZE; l++) {
-                        this.setCell(i + k, j + l, miniBoards[miniBoardIndex].getCellValue(k, l));
-                    }
+                    this.board[j + (i / 2) * Constants.MINI_BOARD_SIZE][k + (i % 2) * Constants.MINI_BOARD_SIZE].setValue(miniBoards[i].getCellValue(j, k));
                 }
-                miniBoardIndex++;
             }
+        }
+    }
+
+    public void printBoard(){
+        for(int i = 0; i < Constants.BOARD_SIZE; i++){
+            for(int j = 0; j < Constants.BOARD_SIZE; j++){
+                System.out.print(this.board[i][j].getValue() + " ");
+            }
+            System.out.println();
         }
     }
 
