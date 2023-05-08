@@ -1,6 +1,6 @@
 package game;
 
-public class MiniBoardHelper extends MiniBoard{
+public class MiniBoardHelper {
     private MiniBoard[] miniBoards;
 
     public MiniBoardHelper(MiniBoard[] miniBoardHelper){
