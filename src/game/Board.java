@@ -42,6 +42,15 @@ public class Board {
         this.board[row][col].setValue(value);
     }
 
+    public boolean isEmpty(int row, int col) {
+        return this.board[row][col].getValue() == Constants.EMPTY;
+    }
+
+    public boolean isValid(int row, int col) {
+        return (row >= 0 && row < Constants.BOARD_SIZE) &&
+                (col >= 0 && col < Constants.BOARD_SIZE) &&
+                this.isEmpty(row, col);
+    }
 
     // create a copy board method that copies a mini board to a quadrant of the board
 
