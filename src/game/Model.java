@@ -6,7 +6,7 @@ import com.mrjaffesclass.apcs.messenger.Messenger;
 public class Model implements MessageHandler {
     private final Messenger mvcMessaging;
 
-    private int whoseMove;
+    private boolean whoseMove;
     private boolean gameOver;
     private Board board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
 
@@ -23,7 +23,7 @@ public class Model implements MessageHandler {
     }
 
     private void newGame() {
-        this.whoseMove = 0;
+        this.whoseMove = false; // Black
         this.gameOver = false;
         this.board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
     }
@@ -48,7 +48,7 @@ public class Model implements MessageHandler {
                     this.whoseMove = this.board.makeMove(x, y, this.whoseMove);
 
                     // check if the game is over
-                    this.gameOver = this.board.isGameOver();
+                    this.gameOver = this.board.isWinner(this.whoseMove);
                     mvcMessaging.notify("whoseMove", this.whoseMove);
 
 
