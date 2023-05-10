@@ -1,5 +1,7 @@
-package game;
+package board;
 
+
+import game.Constants;
 
 public class BoardCell{
 	private int value;

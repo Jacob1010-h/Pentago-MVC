@@ -1,4 +1,6 @@
-package game;
+package board;
+
+import game.Constants;
 
 public class MiniBoard {
     private BoardCell[][] miniBoard;

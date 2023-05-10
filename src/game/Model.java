@@ -1,5 +1,8 @@
 package game;
 
+import board.Board;
+import board.BoardCell;
+import board.Position;
 import com.mrjaffesclass.apcs.messenger.MessageHandler;
 import com.mrjaffesclass.apcs.messenger.Messenger;
 

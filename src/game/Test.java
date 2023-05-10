@@ -1,5 +1,10 @@
 package game;
 
+import board.Board;
+import board.BoardCell;
+import board.MiniBoard;
+import board.MiniBoardHelper;
+
 import java.util.Arrays;
 
 public class Test {
