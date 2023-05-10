@@ -1,6 +1,6 @@
 package game;
 
-public class MiniBoard extends BoardCell {
+public class MiniBoard {
     private BoardCell[][] miniBoard;
 
     public MiniBoard(BoardCell[][] miniBoard) {
@@ -119,4 +119,13 @@ public class MiniBoard extends BoardCell {
     }
 
 
+    public void printBoard() {
+        for (int i = 0; i < Constants.MINI_BOARD_SIZE; i++) {
+            for (int j = 0; j < Constants.MINI_BOARD_SIZE; j++) {
+                System.out.print(this.miniBoard[i][j].getValue() + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 }

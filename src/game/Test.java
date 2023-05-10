@@ -8,17 +8,12 @@ public class Test {
     static MiniBoard[] miniBoards = new MiniBoard[Constants.MINI_BOARD_AMOUNT];
     static MiniBoardHelper miniBoardHelper = new MiniBoardHelper(miniBoards);
     public static void main(String[] args) {
-        for (int i = 0; i < Constants.MINI_BOARD_AMOUNT; i++) {
-            int finalI = i;
-            Arrays.stream(miniBoardHelper.getMiniBoards()[i].getMiniBoard()).forEach(row -> Arrays.fill(row, new BoardCell(finalI % 2 == 0 ? Constants.BLACK : Constants.WHITE)));
-        }
+        MiniBoard[] miniBoards1 = miniBoardHelper.getMiniBoards();
+        Arrays.stream(miniBoards1).forEach(i -> {System.out.println("Board "+i+":"); i.printBoard(); });
+        System.out.println();
+
 
         board.copyBoard(miniBoardHelper);
-        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
-            for (int j = 0; j < Constants.BOARD_SIZE; j++) {
-                System.out.print(board.getCell(i, j).getValue() + " ");
-            }
-            System.out.println();
-        }
+        board.printBoard();
     }
 }
