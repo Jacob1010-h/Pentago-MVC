@@ -28,8 +28,6 @@ public class Model implements MessageHandler {
         this.board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
     }
 
-
-
     @Override
     public void messageHandler(String messageString, Object messageObject) {
         if (messageObject != null) {
@@ -46,11 +44,11 @@ public class Model implements MessageHandler {
                 int y = position.getY();
                 // if the move is valid
                 if (this.board.isValid(x, y)) {
-                    // make the move
-                    this.whoseMove = this.board.makeMove(x, y, this.whoseMove);
+                    // make the move using the MiniBoardHelper method makeMove()
+
 
                     // check if the game is over
-                    this.gameOver = this.board.isWinner(this.whoseMove);
+                    this.gameOver = (this.board.isWinner() != Constants.EMPTY) || this.board.isFull();
                     mvcMessaging.notify("whoseMove", this.whoseMove);
 
 

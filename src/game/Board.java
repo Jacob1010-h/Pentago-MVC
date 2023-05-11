@@ -45,6 +45,17 @@ public class Board {
         return this.board[row][col].getValue() == Constants.EMPTY;
     }
 
+    public boolean isFull() {
+        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
+            for (int j = 0; j < Constants.BOARD_SIZE; j++) {
+                if (this.isEmpty(i, j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean isValid(int row, int col) {
         return (row >= 0 && row < Constants.BOARD_SIZE) &&
                 (col >= 0 && col < Constants.BOARD_SIZE) &&
@@ -83,47 +94,77 @@ public class Board {
         }
     }
 
-    public boolean makeMove(int x, int y, boolean whoseMove) {
-        this.setCell(x, y, whoseMove ? Constants.WHITE : Constants.BLACK);
-        return !whoseMove;
-    }
-
     // The player must have 5 pieces in a row to win
-    public boolean isWinner(boolean whoseMove) {
-        int player = whoseMove ? Constants.WHITE : Constants.BLACK;
-        int count;
+    public int isWinner() {
+        int countW1, countW2, countB1, countB2;
 
         // check rows
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
-            count = 0;
+            countW1 = 0;
+            countB1 = 0;
             for (int j = 0; j < Constants.BOARD_SIZE; j++) {
-                if (this.board[i][j].getValue() == player) {
-                    count++;
-                } else {
-                    count = 0;
-                }
-                if (count == 5) {
-                    return true;
-                }
-            }
+                // if the player is white, check for 5 white pieces in a row
+                countW1 = (this.board[i][j].getValue() == Constants.WHITE) ? countW1 + 1 : 0;
+                if (countW1 == 5)
+                    return Constants.WHITE;
 
+                // if the player is black, check for 5 black pieces in a row
+                countB1 = (this.board[i][j].getValue() == Constants.BLACK) ? countB1 + 1 : 0;
+                if (countB1 == 5)
+                    return Constants.BLACK;
+            }
         }
 
         // check columns
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
-            count = 0;
+            countW1 = 0;
+            countB1 = 0;
             for (int j = 0; j < Constants.BOARD_SIZE; j++) {
-                if (this.board[j][i].getValue() == player) {
-                    count++;
-                } else {
-                    count = 0;
+                // if the player is white, check for 5 white pieces in a column
+                countW1 = (this.board[j][i].getValue() == Constants.WHITE) ? countW1 + 1 : 0;
+                if (countW1 == 5)
+                    return Constants.WHITE;
+
+                // if the player is black, check for 5 black pieces in a column
+                countB1 = (this.board[j][i].getValue() == Constants.BLACK) ? countB1 + 1 : 0;
+                if (countB1 == 5)
+                    return Constants.BLACK;
+            }
+        }
+
+        // check diagonals
+        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
+            countW1 = 0;
+            countW2 = 0;
+            countB1 = 0;
+            countB2 = 0;
+            for (int j = 0; j < Constants.BOARD_SIZE; j++) {
+                if (i + j < Constants.BOARD_SIZE) {
+                    // if the player is white, check for 5 white pieces in a diagonal (top left to bottom right)
+                    countW1 = (this.board[i + j][j].getValue() == Constants.WHITE) ? countW1 + 1 : 0;
+                    if (countW1 == 5)
+                        return Constants.WHITE;
+
+                    // if the player is black, check for 5 black pieces in a diagonal (top left to bottom right)
+                    countB1 = (this.board[i + j][j].getValue() == Constants.BLACK) ? countB1 + 1 : 0;
+                    if (countB1 == 5)
+                        return Constants.BLACK;
                 }
-                if (count == 5) {
-                    return true;
+                if (Constants.BOARD_SIZE -1 - i - j >= 0) {
+                    // if the player is white, check for 5 white pieces in a diagonal (top right to bottom left)
+                    countW2 = (this.board[j][Constants.BOARD_SIZE - 1 - i - j].getValue() == Constants.WHITE) ? countW2 + 1 : 0;
+                    if (countW2 == 5)
+                        return Constants.WHITE;
+
+                    // if the player is black, check for 5 black pieces in a diagonal (top right to bottom left)
+                    countB2 = (this.board[j][Constants.BOARD_SIZE - 1 - i - j].getValue() == Constants.BLACK) ? countB2 + 1 : 0;
+                    if (countB2 == 5)
+                        return Constants.BLACK;
                 }
             }
         }
-        
-        return false;
+
+        // if the player has no winning rows, columns, or diagonals, return false
+        return Constants.EMPTY;
     }
 }
