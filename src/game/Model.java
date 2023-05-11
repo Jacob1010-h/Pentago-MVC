@@ -1,8 +1,5 @@
 package game;
 
-import board.Board;
-import board.BoardCell;
-import board.Position;
 import com.mrjaffesclass.apcs.messenger.MessageHandler;
 import com.mrjaffesclass.apcs.messenger.Messenger;
 
@@ -30,6 +27,8 @@ public class Model implements MessageHandler {
         this.gameOver = false;
         this.board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
     }
+
+
 
     @Override
     public void messageHandler(String messageString, Object messageObject) {

@@ -1,6 +1,4 @@
-package board;
-
-import game.Constants;
+package game;
 
 public class MiniBoardHelper {
     private MiniBoard[] miniBoards;
@@ -41,5 +39,20 @@ public class MiniBoardHelper {
             this.miniBoards[i] = new MiniBoard(new BoardCell[Constants.MINI_BOARD_SIZE][Constants.MINI_BOARD_SIZE]);
         }
     }
+    public void makeMove(Player player, int row, int col) {
+        int miniBoardIndex = getMiniBoardIndex(row, col);
+        System.out.println(miniBoardIndex);
+        if (miniBoardIndex == 1 || miniBoardIndex == 3) {
+            col -= 3;
+        }
+        if (miniBoardIndex == 2 || miniBoardIndex == 3) {
+            row -= 3;
+        }
+        this.miniBoards[miniBoardIndex].makeMove(row, col, player);
+    }
+    public int getMiniBoardIndex(int row, int col) {
+        return ((row/3) * 2 + (col / 3));
+    }
+
 
 }

@@ -1,6 +1,4 @@
-package board;
-
-import game.Constants;
+package game;
 
 public class Board {
     private BoardCell[][] board;
@@ -108,6 +106,7 @@ public class Board {
                     return true;
                 }
             }
+
         }
 
         // check columns
@@ -124,7 +123,7 @@ public class Board {
                 }
             }
         }
-
+        
         return false;
     }
 }

@@ -39,6 +39,7 @@ public class Controller implements MessageHandler{
     public static void main(String[] args) {
         Controller app = new Controller();  // Create our controller...
         app.init();
+
     }
 
     @Override
