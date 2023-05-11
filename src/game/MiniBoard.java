@@ -1,6 +1,4 @@
-package board;
-
-import game.Constants;
+package game;
 
 public class MiniBoard {
     private BoardCell[][] miniBoard;
@@ -120,6 +118,9 @@ public class MiniBoard {
         }
     }
 
+    public void makeMove(int row, int col, Player player) {
+        this.miniBoard[row][col].setValue(player.getColor());
+    }
 
     public void printBoard() {
         for (int i = 0; i < Constants.MINI_BOARD_SIZE; i++) {
