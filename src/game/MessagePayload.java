@@ -11,15 +11,51 @@ public class MessagePayload {
 
     private final String message;
     private final Position position;
+    private final Player player;
+    private final MiniBoardHelper miniBoardHelper;
+    private final Board board;
 
     /**
      * Class constructor
-     * @param _field Text field 1 or 2
-     * @param _direction Direction (Constants.UP or Constants.DOWN)
+     * @param message The message to send
+     * @param position The position to send
+     * @param player The player to send
      */
-    public MessagePayload(String message, Position position) {
+    public MessagePayload(String message, Position position, Player player, MiniBoardHelper miniBoardHelper) {
         this.message = message;
+        this.board = null;
         this.position = position;
+        this.player = player;
+        this.miniBoardHelper = miniBoardHelper;
+    }
+    public MessagePayload(String message, MiniBoardHelper miniBoardHelper) {
+        this.message = message;
+        this.board = null;
+        this.position = null;
+        this.player = null;
+        this.miniBoardHelper = miniBoardHelper;
+    }
+    public MessagePayload(String message) {
+        this.message = message;
+        this.board = null;
+        this.position = null;
+        this.player = null;
+        this.miniBoardHelper = null;
+    }
+    public MessagePayload(String message, Board board) {
+        this.message = message;
+        this.board = board;
+        this.position = null;
+        this.player = null;
+        this.miniBoardHelper = null;
+    }
+
+    public MessagePayload(String message, Player player) {
+        this.message = message;
+        this.board = null;
+        this.position = null;
+        this.player = player;
+        this.miniBoardHelper = null;
     }
 
     /**
@@ -30,8 +66,16 @@ public class MessagePayload {
      * @return A new instance of the class `MessagePayload` with the `printOut` parameter passed as an
      * argument and `null` as the second argument.
      */
-    public MessagePayload createMessagePayload(String printOut) {
-        return new MessagePayload(printOut, null);
+    public static MessagePayload createMessagePayload(String printOut) {
+        return new MessagePayload(printOut);
+    }
+
+    public static MessagePayload createMessagePayload(String printOut, MiniBoardHelper miniBoardHelper) {
+        return new MessagePayload(printOut, miniBoardHelper);
+    }
+
+    public static MessagePayload createMessagePayload(String printOut, Board board){
+        return new MessagePayload(printOut, board);
     }
 
     /**
@@ -46,8 +90,12 @@ public class MessagePayload {
      * @return A new instance of the class `MessagePayload` with the specified `printOut` and `position`
      * values.
      */
-    public MessagePayload createMessagePayload(String printOut, Position position) {
-        return new MessagePayload(printOut, position);
+    public static MessagePayload createMessagePayload(String printOut, Position position, Player player, MiniBoardHelper miniBoardHelper) {
+        return new MessagePayload(printOut, position, player, miniBoardHelper);
+    }
+
+    public static MessagePayload createMessagePayload(String printOut, Player player) {
+        return new MessagePayload(printOut, player);
     }
 
     /**
@@ -69,4 +117,11 @@ public class MessagePayload {
         return this.position;
     }
 
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public MiniBoardHelper getMiniBoardHelper() {
+        return this.miniBoardHelper;
+    }
 }
