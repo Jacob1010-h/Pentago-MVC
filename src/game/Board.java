@@ -95,7 +95,7 @@ public class Board {
     }
 
     // The player must have 5 pieces in a row to win
-    public int isWinner() {
+    public Object isWinner() {
         int countW1, countW2, countB1, countB2;
 
         // check rows
@@ -165,6 +165,6 @@ public class Board {
         }
 
         // if the player has no winning rows, columns, or diagonals, return false
-        return Constants.EMPTY;
+        return null;
     }
 }
