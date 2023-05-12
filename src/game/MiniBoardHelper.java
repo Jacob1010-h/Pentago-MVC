@@ -50,6 +50,7 @@ public class MiniBoardHelper {
         }
         this.miniBoards[miniBoardIndex].makeMove(row, col, player);
     }
+
     public int getMiniBoardIndex(int row, int col) {
         return ((row/3) * 2 + (col / 3));
     }
