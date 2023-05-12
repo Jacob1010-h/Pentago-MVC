@@ -29,30 +29,41 @@ public class Model implements MessageHandler {
     }
 
     @Override
-    public void messageHandler(String messageString, Object messageObject) {
-        if (messageObject != null) {
-            System.out.println("MSG: received by model: " + messageString + " | " + messageObject.toString());
+    public void messageHandler(String messageString, Object messagePayload) {
+
+        MessagePayload payload = (MessagePayload) messagePayload;
+        String message = payload.getMessage();
+        Position position = payload.getPosition();
+        Player player = payload.getPlayer();
+        MiniBoardHelper miniBoardHelper = payload.getMiniBoardHelper();
+
+        if (message != null) {
+            System.out.println("MSG: received by model: " + message + " | " + messagePayload.toString());
         } else {
-            System.out.println("MSG: received by model: " + messageString + " | No data sent");
+            System.out.println("MSG: received by model: " + message + " | No data sent");
         }
 
-        switch (messageString) {
+        switch (payload.getMessage()) {
+            case "boardUpdate" -> this.board.copyBoard(miniBoardHelper); // requires miniBoardHelper
+            case "whoseMoveUpdate" -> this.whoseMove = !this.whoseMove;
+            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
+            case "makeMove" -> miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
+
             case "playerMove" -> {
-                Position position = (Position) messageObject;
-                assert position != null;
-                int x = position.getX();
-                int y = position.getY();
-                // if the move is valid
-                if (this.board.isValid(x, y)) {
-                    // make the move using the MiniBoardHelper method makeMove()
+                if (!this.gameOver) {
+                    // this copy is for redundancy
+                    this.mvcMessaging.notify("boardUpdate", MessagePayload.createMessagePayload("boardUpdate", miniBoardHelper));
 
+                    // make the move and copy the boards to the current board
+                    this.mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", position, player, miniBoardHelper));
+                    this.mvcMessaging.notify("boardUpdate", MessagePayload.createMessagePayload("boardUpdate", miniBoardHelper));
 
+                    // change the player
+                    this.mvcMessaging.notify("whoseMoveUpdate", MessagePayload.createMessagePayload("whoseMoveUpdate"));
                     // check if the game is over
-                    this.gameOver = (this.board.isWinner() != Constants.EMPTY) || this.board.isFull();
-                    mvcMessaging.notify("whoseMove", this.whoseMove);
-
-
+                    this.mvcMessaging.notify("gameOverUpdate", MessagePayload.createMessagePayload("gameOverUpdate"));
                 }
+
             }
         }
     }
