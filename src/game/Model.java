@@ -9,7 +9,7 @@ public class Model implements MessageHandler {
     private boolean whoseMove;
     private boolean gameOver;
     private Board board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
-
+    private MiniBoardHelper miniBoardHelper = new MiniBoardHelper(new MiniBoard[Constants.MINI_BOARD_AMOUNT]);
     public Model(Messenger mvcMessaging) {
         this.mvcMessaging = mvcMessaging;
         this.init();
@@ -22,12 +22,15 @@ public class Model implements MessageHandler {
         this.mvcMessaging.subscribe("gameOverUpdate", this);
         this.mvcMessaging.subscribe("makeMove", this);
         this.mvcMessaging.subscribe("playerMove", this);
+        System.out.println("model init");
     }
 
     private void newGame() {
         this.whoseMove = false; // Black
         this.gameOver = false;
         this.board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
+        this.miniBoardHelper = new MiniBoardHelper(new MiniBoard[Constants.MINI_BOARD_AMOUNT]);
+        this.board.copyBoard(this.miniBoardHelper);
     }
 
     @Override

@@ -4,8 +4,10 @@ import com.mrjaffesclass.apcs.messenger.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class GamePanel extends JFrame implements MessageHandler {
+public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     BoardCell[][] cells;
 
@@ -25,6 +27,7 @@ public class GamePanel extends JFrame implements MessageHandler {
         createBoard();
         this.pack();
         this.setVisible(true);
+        this.addMouseListener(this);
     }
 
     @Override
@@ -70,55 +73,38 @@ public class GamePanel extends JFrame implements MessageHandler {
         this.setVisible(true);
     }
 
-    /* rotation
-    public static void rot_animation(int x) {
-        int[] angle = {-90, 90, -90, 90, 90, -90, 90, -90};
-        if (!end & rotateflag) {
-
-            //sound of rotation
-            Ac.play();
-
-            //animation of rotation
-            RotateTransition rotate;
-            if (x == 0 | x == 1) {
-                rotate = new RotateTransition(javafx.util.Duration.seconds(1.2), p1);
-            } else if (x == 2 | x == 3) {
-                rotate = new RotateTransition(javafx.util.Duration.seconds(1.2), p2);
-            } else if (x == 4 | x == 5) {
-                rotate = new RotateTransition(javafx.util.Duration.seconds(1.2), p3);
-            } else if (x == 6 | x == 7) {
-                rotate = new RotateTransition(javafx.util.Duration.seconds(1.2), p4);
-            } else {
-                return;
-            }
-            rotate.setByAngle(angle[x]);
-            rotate.play();
-
-            rot(x);
-            cir(x);
-
-            if (checkwin(1)) {
-                //sound of winning
-                Awin.play();
-                end = true;
-                return;
-            } else if (checkwin(2)) {
-                //sound of winning
-                Alose.play();
-                end = true;
-                return;
-            }
-
-            rotation = true;
-            rotateflag = false;
-            //change background color to show turn
-            if (BlackTurn) {
-                root.setStyle("-fx-background-color: black");
-            } else {
-                root.setStyle("-fx-background-color: white");
-            }
-
-            text.setText("Processing...");
+    public void handleClick(int x, int y) {
+        if (x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM) {
+            System.out.println("yo ass is out of bounds");
         }
-    } */
+    }
+    @Override
+    public void mouseClicked(MouseEvent mouseEvent) {
+        int x = mouseEvent.getX();
+        int y = mouseEvent.getY();
+        System.out.println("x: " + x + " y: " + y);
+        handleClick(x, y);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent mouseEvent) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent mouseEvent) {
+
+    }
+
+
 }

@@ -23,6 +23,7 @@ public class Controller implements MessageHandler{
         GamePanel gp = new GamePanel(mvcMessaging);
 
         Model model = new Model(mvcMessaging);
+
     }
 
     public void init() {
