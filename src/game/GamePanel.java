@@ -36,34 +36,41 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     }
 
     public void createBoard() {
+        int size = 10;  // size of the board, including the outer edge
         JPanel pentagoBoard = new JPanel();
-        pentagoBoard.setLayout(new GridLayout(8,8));
+        pentagoBoard.setLayout(new GridLayout(size,size));
         pentagoBoard.setPreferredSize(new Dimension(800,800));
 
-        cells = new BoardCell[8][8];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        cells = new BoardCell[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 cells[i][j] = new BoardCell();
-                // check if the cell is on the outer edge of the board
-                if (i == 0 || i == 7 || j == 0 || j == 7) {
+                // check if the cell is on the outside of the board
+                if (i < 2 || i > 7 || j < 2 || j > 7) {
                     cells[i][j].setBackground(Color.decode("#dad9b5"));
                 }
                 else {
-                    cells[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                    if ((i + j) % 2 == 0) {
+                    handleBorders(i, j);
+                    if ((i > 4 && j < 5) || (i < 5 && j > 4)) {
                         cells[i][j].setBackground(Color.decode("#6b4526"));
                     } else {
                         cells[i][j].setBackground(Color.decode("#e49e77"));
                     }
                 }
+                cells[i][j].setText(i + ", " + j);
                 cells[i][j].setPreferredSize(new Dimension(100,100));
                 cells[i][j].setOpaque(true);
                 cells[i][j].setVisible(true);
                 pentagoBoard.add(cells[i][j]);
-
-
             }
         }
+        // cells[1][3].setIcon(new ImageIcon("src/game/images/downLeft.png"));
+        // cells[8][3].setIcon(new ImageIcon("src/game/images/leftUp.png"));
+        // cells[8][6].setIcon(new ImageIcon("src/game/images/rightUp.png"));
+        // cells[3][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
+        // cells[3][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
+        // cells[6][1].setIcon(new ImageIcon("src/game/images/rightDown.png"));
+        // cells[1][6].setIcon(new ImageIcon("src/game/images/downRight.png"));
         // pentagoBoard.setOpaque(true);
         pentagoBoard.setVisible(true);
         this.add(pentagoBoard);
@@ -71,6 +78,36 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         // this.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.CENTER);
         // this.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER);
         this.setVisible(true);
+    }
+
+    private void handleBorders(int i, int j) {
+        int top = 1;
+        int left = 1;
+        int bottom = 1;
+        int right = 1;
+        int increment = 3;
+        // check if the cell is on the outer edge of the board
+        if (i == 2 || i == 7 || j == 2 || j == 7) {
+            // only add a border to the outer edge of the board,
+            // using createMatteBorder to only add borders
+            // to the walls that touch the outer edge of the board
+            top = i == 2 ? increment : top;
+            left = j == 2 ? increment : left;
+            bottom = i == 7 ? increment : bottom;
+            right = j == 7 ? increment : right;
+        }
+        // check if the cell crosses with the middle of the board
+        if (i == 4 || i == 5 || j == 4 || j == 5) {
+            // only add a border to the middle of the board,
+            // using createMatteBorder to only add borders
+            // to the walls that touch the middle of the board
+            // top, left, bottom, right
+            top = i == 5 ? increment : top;
+            left = j == 5 ? increment : left;
+            bottom = i == 4 ? increment : bottom;
+            right = j == 4 ? increment : right;
+        }
+        cells[i][j].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.WHITE));
     }
 
     public void handleClick(int x, int y) {
@@ -115,6 +152,4 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void mouseExited(MouseEvent mouseEvent) {
 
     }
-
-
 }
