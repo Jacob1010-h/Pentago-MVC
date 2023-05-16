@@ -74,10 +74,20 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     }
 
     public void handleClick(int x, int y) {
-        if (x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM) {
+        if (outOfBounds(x, y)) {
             System.out.println("yo ass is out of bounds");
+            return;
         }
+
     }
+
+    public boolean outOfBounds(int x, int y) {
+        return x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM;
+    }
+
+
+
+
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
         int x = mouseEvent.getX();

@@ -19,8 +19,14 @@ public class Constants {
 	// out of obunds thing ong
 
 	// 100, 701, 737, 136 for 800 size
-	public static final int X_LEFT = WINDOW_HEIGHT / 8;
-	public static final int X_RIGHT = WINDOW_HEIGHT / MINI_BOARD_AMOUNT;
-	public static final int Y_BOTTOM = WINDOW_WIDTH;
+//	public static final int X_LEFT = WINDOW_HEIGHT / 8;
+//	public static final int X_RIGHT = WINDOW_HEIGHT / MINI_BOARD_AMOUNT;
+//	public static final int Y_BOTTOM = WINDOW_WIDTH;
+//	public static final int Y_TOP= 136;
+
+	public static final int X_LEFT = 100;
+	public static final int X_RIGHT = 701;
+	public static final int Y_BOTTOM = 737;
 	public static final int Y_TOP= 136;
+
 }
