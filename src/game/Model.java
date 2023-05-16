@@ -17,9 +17,11 @@ public class Model implements MessageHandler {
 
     public void init() {
         this.newGame();
+        this.mvcMessaging.subscribe("boardUpdate", this);
+        this.mvcMessaging.subscribe("whoseMoveUpdate", this);
+        this.mvcMessaging.subscribe("gameOverUpdate", this);
+        this.mvcMessaging.subscribe("makeMove", this);
         this.mvcMessaging.subscribe("playerMove", this);
-        this.mvcMessaging.subscribe("newGame", this);
-        this.mvcMessaging.subscribe("whoseMove", this);
     }
 
     private void newGame() {
@@ -48,7 +50,6 @@ public class Model implements MessageHandler {
             case "whoseMoveUpdate" -> this.whoseMove = !this.whoseMove;
             case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
             case "makeMove" -> miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
-
             case "playerMove" -> {
                 if (!this.gameOver) {
                     // this copy is for redundancy
@@ -63,7 +64,6 @@ public class Model implements MessageHandler {
                     // check if the game is over
                     this.mvcMessaging.notify("gameOverUpdate", MessagePayload.createMessagePayload("gameOverUpdate"));
                 }
-
             }
         }
     }
