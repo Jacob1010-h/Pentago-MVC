@@ -22,7 +22,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void init() {
         this.mvcMessaging.subscribe("setIcon", this);
         this.mvcMessaging.subscribe("gameOver", this);
-        this.setTitle("Pentagowo");
+        this.setTitle("Pentagohno");
         // set this icon image to the pentago logo
         this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -219,16 +219,16 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     private void setCell(int row, int col, int color) {
         switch (color) {
-            case 1 -> {
-                cells[row][col].setIcon(new ImageIcon("src/game/images/green.png"));
+            case Constants.WHITE -> {
+                cells[row][col].setIcon(new ImageIcon("src/game/images/whiteMarble.png"));
                 cells[row][col].setValue(color);
             }
-            case -1 -> {
-                cells[row][col].setIcon(new ImageIcon("src/game/images/blue.png"));
+            case Constants.BLACK -> {
+                cells[row][col].setIcon(new ImageIcon("src/game/images/blackMarble.png"));
                 cells[row][col].setValue(color);
             }
             default -> {
-                cells[row][col].setIcon(null);
+                cells[row][col].setIcon(new ImageIcon("src/game/images/blankSquare.png"));
                 cells[row][col].setValue(color);
             }
         }
