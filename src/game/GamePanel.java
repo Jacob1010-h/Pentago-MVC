@@ -129,7 +129,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         int cellSize = Constants.WINDOW_HEIGHT/10;
         if (isRotate) {
             System.out.println("rotate");
-            row = y/cellSize;
+            row = (y-Constants.BLANK_TOP_SPACE)/cellSize;
             col = x/cellSize;
             System.out.println("row: " + row + " Col: " + col);
             if (validRotate(row, col)) {
