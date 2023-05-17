@@ -1,8 +1,6 @@
 package game;
 
 import javax.swing.*;
-import java.awt.*;
-import game.Constants;
 
 public class BoardCell extends JLabel {
 	private int value;
