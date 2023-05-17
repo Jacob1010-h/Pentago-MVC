@@ -58,6 +58,14 @@ public class MessagePayload {
         this.miniBoardHelper = null;
     }
 
+    public MessagePayload(String message, Position position) {
+        this.message = message;
+        this.board = null;
+        this.position = position;
+        this.player = null;
+        this.miniBoardHelper = null;
+    }
+
     /**
      * The function creates a new MessagePayload object with a given printOut string and null metadata.
      *
@@ -96,6 +104,9 @@ public class MessagePayload {
 
     public static MessagePayload createMessagePayload(String printOut, Player player) {
         return new MessagePayload(printOut, player);
+    }
+    public static MessagePayload createMessagePayload(String printOut, Position position) {
+        return new MessagePayload(printOut, position);
     }
 
     /**

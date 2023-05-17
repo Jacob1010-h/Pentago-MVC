@@ -2,7 +2,7 @@ package game;
 
 public class Player
 {
-    private final int color;
+    private int color;
 
     /**
      * Player constructor
@@ -19,6 +19,7 @@ public class Player
     public int getColor() {
         return this.color;
     }
+
 
     /**
      * Gets the player name
@@ -46,6 +47,16 @@ public class Player
         return p == this.getColor();
     }
 
+    public void switchPlayer() {
+        if (this.color == Constants.BLACK) {
+            this.color = Constants.WHITE;
+        } else {
+            this.color = Constants.BLACK;
+        }
+    }
+    public void setColor(int moveColor) {
+        this.color = moveColor;
+    }
     @Override
     public String toString() {
         return switch (this.color) {

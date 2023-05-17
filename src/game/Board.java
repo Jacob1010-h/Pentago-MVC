@@ -89,8 +89,17 @@ public class Board {
         for (int i = 0; i < Constants.BOARD_SIZE; i++) {
             for (int j = 0; j < Constants.BOARD_SIZE; j++) {
                 System.out.print(this.board[i][j].getValue() + " ");
+                if (j == 2) {
+                    System.out.print("| ");
+                }
             }
             System.out.println();
+            if (i == 2) {
+                for (int z = 0; z < 13; z++) {
+                    System.out.print("-");
+                }
+                System.out.println();
+            }
         }
     }
 

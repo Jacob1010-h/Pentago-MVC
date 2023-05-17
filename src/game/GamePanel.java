@@ -11,6 +11,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     BoardCell[][] cells;
 
+    private boolean isRotate = false;
     private final Messenger mvcMessaging;
     public GamePanel(Messenger mvcMessaging) {
         this.mvcMessaging = mvcMessaging;
@@ -64,19 +65,19 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 pentagoBoard.add(cells[i][j]);
             }
         }
-        // cells[1][3].setIcon(new ImageIcon("src/game/images/downLeft.png"));
-        // cells[8][3].setIcon(new ImageIcon("src/game/images/leftUp.png"));
-        // cells[8][6].setIcon(new ImageIcon("src/game/images/rightUp.png"));
-        // cells[3][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
-        // cells[3][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
-        // cells[6][1].setIcon(new ImageIcon("src/game/images/rightDown.png"));
-        // cells[1][6].setIcon(new ImageIcon("src/game/images/downRight.png"));
-        // pentagoBoard.setOpaque(true);
+//         cells[1][3].setIcon(new ImageIcon("src/game/images/downLeft.png"));
+//         cells[8][3].setIcon(new ImageIcon("src/game/images/leftUp.png"));
+//         cells[8][6].setIcon(new ImageIcon("src/game/images/rightUp.png"));
+//         cells[3][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
+//         cells[3][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
+//         cells[6][1].setIcon(new ImageIcon("src/game/images/rightDown.png"));
+//         cells[1][6].setIcon(new ImageIcon("src/game/images/downRight.png"));
+//         pentagoBoard.setOpaque(true);
         pentagoBoard.setVisible(true);
         this.add(pentagoBoard);
         // draw a line through the center of the board, horizontal and vertical
-        // this.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.CENTER);
-        // this.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER);
+//         this.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.CENTER);
+//         this.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER);
         this.setVisible(true);
     }
 
@@ -111,12 +112,27 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     }
 
     public void handleClick(int x, int y) {
+        int row;
+        int col;
+        int cellSize = Constants.WINDOW_HEIGHT/10;
+        if (isRotate) {
+            System.out.println("rotate");
+            isRotate = false;
+            return;
+        }
         if (outOfBounds(x, y)) {
             System.out.println("yo ass is out of bounds");
             return;
         }
+        x -= Constants.X_LEFT;
+        y -= (Constants.Y_TOP + Constants.BLANK_TOP_SPACE);
+        row = y/cellSize;
+        col = x/cellSize;
+        System.out.println("row: " + row + "Col: " + col);
+        mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", new Position(row, col)));
 
     }
+
 
     public boolean outOfBounds(int x, int y) {
         return x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM;

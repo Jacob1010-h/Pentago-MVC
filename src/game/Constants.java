@@ -24,9 +24,11 @@ public class Constants {
 //	public static final int Y_BOTTOM = WINDOW_WIDTH;
 //	public static final int Y_TOP= 136;
 
-	public static final int X_LEFT = 100;
-	public static final int X_RIGHT = 701;
-	public static final int Y_BOTTOM = 737;
-	public static final int Y_TOP= 136;
+	public static final int X_LEFT = 167;
+	public static final int X_RIGHT = 648;
+	public static final int Y_BOTTOM = 671;
+	public static final int Y_TOP= 190;
+
+	public static final int BLANK_TOP_SPACE = 31;
 
 }

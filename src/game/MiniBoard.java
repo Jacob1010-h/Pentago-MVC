@@ -6,7 +6,7 @@ public class MiniBoard {
     public MiniBoard(BoardCell[][] miniBoard) {
         this.miniBoard = miniBoard;
 //		initMiniBoard();
-        initMiniBoardRand();
+        initMiniBoard();
     }
 
     public MiniBoard() {

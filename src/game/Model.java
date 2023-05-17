@@ -6,13 +6,14 @@ import com.mrjaffesclass.apcs.messenger.Messenger;
 public class Model implements MessageHandler {
     private final Messenger mvcMessaging;
 
-    private boolean whoseMove;
     private boolean gameOver;
     private Board board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
     private MiniBoardHelper miniBoardHelper = new MiniBoardHelper(new MiniBoard[Constants.MINI_BOARD_AMOUNT]);
+    private Player player = new Player(Constants.WHITE);
     public Model(Messenger mvcMessaging) {
         this.mvcMessaging = mvcMessaging;
         this.init();
+
     }
 
     public void init() {
@@ -23,15 +24,17 @@ public class Model implements MessageHandler {
         this.mvcMessaging.subscribe("makeMove", this);
         this.mvcMessaging.subscribe("playerMove", this);
         System.out.println("model init");
+
     }
 
     private void newGame() {
-        this.whoseMove = false; // Black
+        this.player.setColor(Constants.WHITE);
         this.gameOver = false;
         this.board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
         this.miniBoardHelper = new MiniBoardHelper(new MiniBoard[Constants.MINI_BOARD_AMOUNT]);
         this.board.copyBoard(this.miniBoardHelper);
     }
+
 
     @Override
     public void messageHandler(String messageString, Object messagePayload) {
@@ -39,20 +42,21 @@ public class Model implements MessageHandler {
         MessagePayload payload = (MessagePayload) messagePayload;
         String message = payload.getMessage();
         Position position = payload.getPosition();
-        Player player = payload.getPlayer();
-        MiniBoardHelper miniBoardHelper = payload.getMiniBoardHelper();
+
 
         if (message != null) {
             System.out.println("MSG: received by model: " + message + " | " + messagePayload.toString());
         } else {
             System.out.println("MSG: received by model: " + message + " | No data sent");
         }
-
         switch (payload.getMessage()) {
-            case "boardUpdate" -> this.board.copyBoard(miniBoardHelper); // requires miniBoardHelper
-            case "whoseMoveUpdate" -> this.whoseMove = !this.whoseMove;
-            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
-            case "makeMove" -> miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
+//            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
+            case "makeMove" -> {
+                miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
+                board.copyBoard(miniBoardHelper); // requires miniBoardHelper
+                board.printBoard();
+                player.switchPlayer();
+            }
             case "playerMove" -> {
                 if (!this.gameOver) {
                     // this copy is for redundancy
@@ -67,6 +71,9 @@ public class Model implements MessageHandler {
                     // check if the game is over
                     this.mvcMessaging.notify("gameOverUpdate", MessagePayload.createMessagePayload("gameOverUpdate"));
                 }
+            }
+            case "rotate" -> {
+
             }
         }
     }
