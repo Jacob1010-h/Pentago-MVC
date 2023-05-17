@@ -22,6 +22,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void init() {
         this.mvcMessaging.subscribe("setIcon", this);
         this.mvcMessaging.subscribe("gameOver", this);
+        this.mvcMessaging.subscribe("invalidMove", this);
         this.setTitle("Pentagowo");
         // set this icon image to the pentago logo
         this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
@@ -58,7 +59,12 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 gameOver(payload.getWinner());
                 updateBoard(payload.getBoard());
             }
+            case "invalidMove" -> {
+                this.isRotate = false;
+                handleIcons();
+            }
         }
+
     }
 
     public void createBoard() {
@@ -135,11 +141,11 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void handleClick(int x, int y) {
         int row;
         int col;
-        int cellSize = Constants.WINDOW_HEIGHT/10;
+        int cellSize = Constants.WINDOW_HEIGHT / 10;
         if (isRotate) {
 //            System.out.println("rotate");
-            row = (y-Constants.BLANK_TOP_SPACE)/cellSize;
-            col = x/cellSize;
+            row = (y - Constants.BLANK_TOP_SPACE) / cellSize;
+            col = x / cellSize;
             System.out.println("row: " + row + " Col: " + col);
             if (validRotate(row, col)) {
                 isRotate = false;
@@ -154,8 +160,8 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         }
         x -= Constants.X_LEFT;
         y -= (Constants.Y_TOP);
-        row = y/cellSize;
-        col = x/cellSize;
+        row = y / cellSize;
+        col = x / cellSize;
         System.out.println("row: " + row + "col: " + col);
         isRotate = true;
         handleIcons();

@@ -55,12 +55,19 @@ public class Model implements MessageHandler {
         switch (payload.getMessage()) {
 //            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
             case "makeMove" -> {
-                miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
-                board.copyBoard(miniBoardHelper); // requires miniBoardHelper
-                // board.printBoard();
-                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
-                player.switchPlayer();
-                board.printBoard();
+                if (this.board.getCell(position.getRow(), position.getCol()).getValue() == Constants.EMPTY) {
+                    miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
+                    board.copyBoard(miniBoardHelper); // requires miniBoardHelper
+                    // board.printBoard();
+                    this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
+                    player.switchPlayer();
+                    board.printBoard();
+                }
+                else {
+                    System.out.println("Invalid move");
+                    mvcMessaging.notify("invalidMove", MessagePayload.createMessagePayload(("invalidMove")));
+                }
+
             }
             case "rotate" -> {
                 System.out.println();
