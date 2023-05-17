@@ -75,14 +75,13 @@ public class Model implements MessageHandler {
                 this.board.copyBoard(this.miniBoardHelper);
                 board.printBoard();
                 this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
-                if (this.board.isWinner() == Constants.EMPTY) {
-                    return;
-                }
+
                 if (this.board.isWinner() == Constants.WHITE) {
                     this.newGame();
                     this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board));
-
-
+                } else if (this.board.isWinner() == Constants.BLACK) {
+                    this.newGame();
+                    this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board));
                 }
             }
         }
