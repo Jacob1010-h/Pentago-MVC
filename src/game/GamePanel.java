@@ -20,6 +20,8 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     public void init() {
         this.setTitle("Pentagowo");
+        // set this icon image to the pentago logo
+        this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800, 800);
         this.setResizable(false);
@@ -58,26 +60,15 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                         cells[i][j].setBackground(Color.decode("#e49e77"));
                     }
                 }
-                cells[i][j].setText(i + ", " + j);
-                cells[i][j].setPreferredSize(new Dimension(100,100));
+                // cells[i][j].setText(i + ", " + j);
+                cells[i][j].setPreferredSize(new Dimension(80, 80));
                 cells[i][j].setOpaque(true);
                 cells[i][j].setVisible(true);
                 pentagoBoard.add(cells[i][j]);
             }
         }
-//         cells[1][3].setIcon(new ImageIcon("src/game/images/downLeft.png"));
-//         cells[8][3].setIcon(new ImageIcon("src/game/images/leftUp.png"));
-//         cells[8][6].setIcon(new ImageIcon("src/game/images/rightUp.png"));
-//         cells[3][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
-//         cells[3][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
-//         cells[6][1].setIcon(new ImageIcon("src/game/images/rightDown.png"));
-//         cells[1][6].setIcon(new ImageIcon("src/game/images/downRight.png"));
-//         pentagoBoard.setOpaque(true);
         pentagoBoard.setVisible(true);
         this.add(pentagoBoard);
-        // draw a line through the center of the board, horizontal and vertical
-//         this.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.CENTER);
-//         this.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER);
         this.setVisible(true);
     }
 
@@ -118,12 +109,15 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         if (isRotate) {
             System.out.println("rotate");
             isRotate = false;
+            handleIcons();
             return;
         }
+        isRotate = true;
         if (outOfBounds(x, y)) {
             System.out.println("yo ass is out of bounds");
             return;
         }
+        handleIcons();
         x -= Constants.X_LEFT;
         y -= (Constants.Y_TOP + Constants.BLANK_TOP_SPACE);
         row = y/cellSize;
@@ -133,13 +127,34 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     }
 
+    private void handleIcons() {
+        if (isRotate) {
+            cells[1][3].setIcon(new ImageIcon("src/game/images/leftDown.png"));
+            cells[3][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
+            cells[1][6].setIcon(new ImageIcon("src/game/images/rightDown.png"));
+            cells[3][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
+            cells[6][1].setIcon(new ImageIcon("src/game/images/downRight.png"));
+            cells[8][3].setIcon(new ImageIcon("src/game/images/leftUp.png"));
+            cells[8][6].setIcon(new ImageIcon("src/game/images/rightUp.png"));
+            cells[6][8].setIcon(new ImageIcon("src/game/images/downLeft.png"));
+        }
+        else {
+            cells[1][3].setIcon(null);
+            cells[3][1].setIcon(null);
+            cells[1][6].setIcon(null);
+            cells[3][8].setIcon(null);
+            cells[6][1].setIcon(null);
+            cells[8][3].setIcon(null);
+            cells[8][6].setIcon(null);
+            cells[6][8].setIcon(null);
+        }
+        // update the graphics
+        this.repaint();
+    }
 
     public boolean outOfBounds(int x, int y) {
         return x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM;
     }
-
-
-
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
@@ -161,11 +176,11 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {
-
+    
     }
 
     @Override
     public void mouseExited(MouseEvent mouseEvent) {
-
+    
     }
 }
