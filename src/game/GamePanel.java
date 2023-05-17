@@ -21,7 +21,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     public void init() {
         this.mvcMessaging.subscribe("setIcon", this);
-        this.mvcMessaging.subscribe("rotate", this);
+        this.mvcMessaging.subscribe("gameOver", this);
         this.setTitle("Pentagowo");
         // set this icon image to the pentago logo
         this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
@@ -42,6 +42,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         String message = payload.getMessage();
         Position position = payload.getPosition();
         Player player = payload.getPlayer();
+        Board board = payload.getBoard();
 
         if (message != null) {
             System.out.println("MSG: received by model: " + message + " | " + messagePayload.toString());
@@ -51,10 +52,11 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         switch (payload.getMessage()) {
 //            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
             case "setIcon" -> {
-                this.setCell(position.getRow()+2, position.getCol()+2, player.getColor());
+                updateBoard(board);
             }
-            case "rotate" -> {
-                this.rotateSection(payload.getRotateSection(), payload.getRotateClockwise());
+            case "gameOver" -> {
+                gameOver(payload.getWinner());
+                updateBoard(payload.getBoard());
             }
         }
     }
@@ -63,7 +65,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         int size = 10;  // size of the board, including the outer edge
         JPanel pentagoBoard = new JPanel();
         pentagoBoard.setLayout(new GridLayout(size,size));
-        pentagoBoard.setPreferredSize(new Dimension(800,800));
+            pentagoBoard.setPreferredSize(new Dimension(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT));
 
         cells = new BoardCell[size][size];
         for (int i = 0; i < size; i++) {
@@ -93,6 +95,13 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         this.setVisible(true);
     }
 
+    public void updateBoard(Board board) {
+        for (int i = 2; i < 8; i++) {
+            for (int j = 2; j < 8; j++) {
+                setCell(i, j, board.getBoard()[i - 2][j - 2].getValue());
+            }
+        }
+    }
     private void handleBorders(int i, int j) {
         int top = 1;
         int left = 1;
@@ -128,7 +137,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         int col;
         int cellSize = Constants.WINDOW_HEIGHT/10;
         if (isRotate) {
-            System.out.println("rotate");
+//            System.out.println("rotate");
             row = (y-Constants.BLANK_TOP_SPACE)/cellSize;
             col = x/cellSize;
             System.out.println("row: " + row + " Col: " + col);
@@ -144,16 +153,20 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
             return;
         }
         x -= Constants.X_LEFT;
-        y -= (Constants.Y_TOP + Constants.BLANK_TOP_SPACE);
+        y -= (Constants.Y_TOP);
         row = y/cellSize;
         col = x/cellSize;
-        System.out.println("row: " + row + "Col: " + col);
+        System.out.println("row: " + row + "col: " + col);
         isRotate = true;
         handleIcons();
         mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", new Position(row, col)));
 
     }
 
+    public void gameOver(int winner) {
+        Player player = new Player(winner);
+        JOptionPane.showMessageDialog(null, player.toString() + " WINS!!!");
+    }
     private boolean getRotateClockwise(Position pos) {
         return (pos.equals(1,6) || 
                 pos.equals(3,1) ||
@@ -203,91 +216,21 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         }
     }
 
-    /**
-     * Rotates the section of the board that was clicked, 
-     * clockwise or counterclockwise depending on the boolean
-     * @param clockwise true if clockwise, false if counterclockwise rotation
-     * @param section the section of the board that was clicked
-     */
-    private void rotateSection(int section, boolean clockwise) {
-        int rowStart, colStart;
-        switch (section) {
-            case 1:
-                rowStart = 2+0;
-                colStart = 2+0;
-                break;
-            case 2:
-                rowStart = 2+0;
-                colStart = 2+3;
-                break;
-            case 3:
-                rowStart = 2+3;
-                colStart = 2+0;
-                break;
-            case 4:
-                rowStart = 2+3;
-                colStart = 2+3;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid section number: " + section);
-        }
-        System.out.println(rowStart + " aaand " + colStart );
-        int[][] sectionValues = new int[3][3];
-        
-        // Copy the values of the section into a 2D array
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                sectionValues[i][j] = cells[rowStart + i][colStart + j].getValue();
-                setCell(rowStart+i, colStart+j, 0);
-            }
-        }
-        
-        // Rotate the section in a clockwise or counterclockwise direction
-        if (clockwise) {
-            for (int i = 0; i < 3 / 2; i++) {
-                for (int j = i; j < 3 - i - 1; j++) {
-                    int temp = sectionValues[i][j];
-                    sectionValues[i][j] = sectionValues[3 - j - 1][i];
-                    sectionValues[3 - j - 1][i] = sectionValues[3 - i - 1][3 - j - 1];
-                    sectionValues[3 - i - 1][3 - j - 1] = sectionValues[j][3 - i - 1];
-                    sectionValues[j][3 - i - 1] = temp;
-                }
-            }
-        } else {
-            for (int i = 0; i < 3 / 2; i++) {
-                for (int j = i; j < 3 - i - 1; j++) {
-                    int temp = sectionValues[i][j];
-                    sectionValues[i][j] = sectionValues[j][3 - i - 1];
-                    sectionValues[j][3 - i - 1] = sectionValues[3 - i - 1][3 - j - 1];
-                    sectionValues[3 - i - 1][3 - j - 1] = sectionValues[3 - j - 1][i];
-                    sectionValues[3 - j - 1][i] = temp;
-                }
-            }
-        }
-        
-        // Copy the rotated values back into the cells
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                setCell(i+rowStart, j+colStart, sectionValues[i][j]);
-            }
-        }
-    }
 
     private void setCell(int row, int col, int color) {
-        switch (color)
-        {
-            case 1: 
+        switch (color) {
+            case 1 -> {
                 cells[row][col].setIcon(new ImageIcon("src/game/images/green.png"));
                 cells[row][col].setValue(color);
-                break;
-            case -1: 
+            }
+            case -1 -> {
                 cells[row][col].setIcon(new ImageIcon("src/game/images/blue.png"));
                 cells[row][col].setValue(color);
-                break;
-            default: 
+            }
+            default -> {
                 cells[row][col].setIcon(null);
                 cells[row][col].setValue(color);
-                break;
+            }
         }
     }
 

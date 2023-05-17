@@ -60,8 +60,8 @@ public class Player
     @Override
     public String toString() {
         return switch (this.color) {
-            case Constants.BLACK -> this.getName() + " (BLACK)";
-            case Constants.WHITE -> this.getName() + " (WHITE)";
+            case Constants.BLACK -> "BLACK";
+            case Constants.WHITE -> "WHITE";
             default -> this.getName() + " (?????)";
         };
     }

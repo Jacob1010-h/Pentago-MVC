@@ -15,8 +15,11 @@ public class MessagePayload {
     private final MiniBoardHelper miniBoardHelper;
     private final Board board;
 
+
+
     private final int rotateSection;
     private final boolean rotateClockwise;
+    private final int winner;
 
     /**
      * Class constructor
@@ -32,6 +35,7 @@ public class MessagePayload {
         this.miniBoardHelper = miniBoardHelper;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
     }
 
     public MessagePayload(String message, Position position, Player player) {
@@ -42,6 +46,7 @@ public class MessagePayload {
         this.miniBoardHelper = null;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
     }
 
     public MessagePayload(String message, MiniBoardHelper miniBoardHelper) {
@@ -52,6 +57,7 @@ public class MessagePayload {
         this.miniBoardHelper = miniBoardHelper;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
     }
     public MessagePayload(String message) {
         this.message = message;
@@ -61,6 +67,7 @@ public class MessagePayload {
         this.miniBoardHelper = null;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
     }
     public MessagePayload(String message, Board board) {
         this.message = message;
@@ -70,6 +77,18 @@ public class MessagePayload {
         this.miniBoardHelper = null;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
+    }
+
+    public MessagePayload(String message, int winner, Board board) {
+        this.message = message;
+        this.board = board;
+        this.position = null;
+        this.player = null;
+        this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
+        this.winner = winner;
     }
 
     public MessagePayload(String message, Player player) {
@@ -80,6 +99,7 @@ public class MessagePayload {
         this.miniBoardHelper = null;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
     }
 
     public MessagePayload(String message, Position position) {
@@ -90,6 +110,7 @@ public class MessagePayload {
         this.miniBoardHelper = null;
         this.rotateSection = -1;
         this.rotateClockwise = false;
+        this.winner = 0;
     }
 
     public MessagePayload(String message, int rotateSection, boolean rotateClockwise) {
@@ -100,6 +121,7 @@ public class MessagePayload {
         this.miniBoardHelper = null;
         this.rotateSection = rotateSection;
         this.rotateClockwise = rotateClockwise;
+        this.winner = 0;
     }
 
     /**
@@ -153,6 +175,10 @@ public class MessagePayload {
         return new MessagePayload(printOut, position);
     }
 
+    public static MessagePayload createMessagePayload(String printOut, int winner, Board board) {
+        return new MessagePayload(printOut, winner, board);
+    }
+
     /**
      * The function returns the message stored in the object.
      *
@@ -184,6 +210,12 @@ public class MessagePayload {
         return this.rotateSection;
     }
 
+    public int getWinner() {
+        return this.winner;
+    }
+    public Board getBoard() {
+        return this.board;
+    }
     public boolean getRotateClockwise() {
         return this.rotateClockwise;
     }

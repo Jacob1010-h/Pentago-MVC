@@ -16,6 +16,8 @@ public class Constants {
 	public static final int BLACK = -1;
 	public static final int WHITE = 1;
 
+
+
 	// out of obunds thing ong
 
 	// 100, 701, 737, 136 for 800 size

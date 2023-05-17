@@ -18,7 +18,7 @@ public class MiniBoardHelper {
      * @param miniBoardIndex Determine which miniboard to rotate
      */
     public void rotateClockwise(int miniBoardIndex) {
-        this.miniBoards[miniBoardIndex].rotateClockwise();
+        this.miniBoards[miniBoardIndex - 1].rotateClockwise();
     }
 
     /**
@@ -27,7 +27,7 @@ public class MiniBoardHelper {
      * @param miniBoardIndex Specify which miniboard to rotate
      */
     public void rotateCounterClockwise(int miniBoardIndex) {
-        this.miniBoards[miniBoardIndex].rotateCounterClockwise();
+        this.miniBoards[miniBoardIndex - 1].rotateCounterClockwise();
     }
 
 

@@ -23,6 +23,7 @@ public class Model implements MessageHandler {
         this.mvcMessaging.subscribe("gameOverUpdate", this);
         this.mvcMessaging.subscribe("makeMove", this);
         this.mvcMessaging.subscribe("playerMove", this);
+        this.mvcMessaging.subscribe("rotate", this);
         System.out.println("model init");
 
     }
@@ -42,6 +43,8 @@ public class Model implements MessageHandler {
         MessagePayload payload = (MessagePayload) messagePayload;
         String message = payload.getMessage();
         Position position = payload.getPosition();
+        Boolean clockwise = payload.getRotateClockwise();
+        int section = payload.getRotateSection();
 
 
         if (message != null) {
@@ -55,26 +58,32 @@ public class Model implements MessageHandler {
                 miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
                 board.copyBoard(miniBoardHelper); // requires miniBoardHelper
                 // board.printBoard();
-                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", position, player));
+                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
                 player.switchPlayer();
-            }
-            case "playerMove" -> {
-                if (!this.gameOver) {
-                    // this copy is for redundancy
-                    this.mvcMessaging.notify("boardUpdate", MessagePayload.createMessagePayload("boardUpdate", miniBoardHelper));
-
-                    // make the move and copy the boards to the current board
-                    this.mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", position, player, miniBoardHelper));
-                    this.mvcMessaging.notify("boardUpdate", MessagePayload.createMessagePayload("boardUpdate", miniBoardHelper));
-
-                    // change the player
-                    this.mvcMessaging.notify("whoseMoveUpdate", MessagePayload.createMessagePayload("whoseMoveUpdate"));
-                    // check if the game is over
-                    this.mvcMessaging.notify("gameOverUpdate", MessagePayload.createMessagePayload("gameOverUpdate"));
-                }
+                board.printBoard();
             }
             case "rotate" -> {
-                
+                System.out.println();
+                System.out.println(section);
+                System.out.println("rotate");
+                if (clockwise) {
+                    miniBoardHelper.rotateClockwise(section);
+                }
+                else {
+                    miniBoardHelper.rotateCounterClockwise(section);
+                }
+                this.board.copyBoard(this.miniBoardHelper);
+                board.printBoard();
+                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
+                if (this.board.isWinner() == Constants.EMPTY) {
+                    return;
+                }
+                if (this.board.isWinner() == Constants.WHITE) {
+                    this.newGame();
+                    this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board));
+
+
+                }
             }
         }
     }
