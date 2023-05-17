@@ -85,9 +85,9 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 else {
                     handleBorders(i, j);
                     if ((i > 4 && j < 5) || (i < 5 && j > 4)) {
-                        cells[i][j].setBackground(Color.decode("#6b4526"));
+                        cells[i][j].setIcon(new ImageIcon("src/game/images/blankSquare.png"));
                     } else {
-                        cells[i][j].setBackground(Color.decode("#e49e77"));
+                        cells[i][j].setIcon(new ImageIcon("src/game/images/blankSquare.png"));
                     }
                 }
                 // cells[i][j].setText( i + ", " + j);

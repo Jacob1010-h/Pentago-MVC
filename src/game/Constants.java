@@ -33,4 +33,6 @@ public class Constants {
 
 	public static final int BLANK_TOP_SPACE = 31;
 
+	public static final int CELL_SIZE = WINDOW_HEIGHT/10;
+
 }
