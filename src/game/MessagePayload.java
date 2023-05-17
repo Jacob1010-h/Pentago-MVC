@@ -15,6 +15,9 @@ public class MessagePayload {
     private final MiniBoardHelper miniBoardHelper;
     private final Board board;
 
+    private final int rotateSection;
+    private final boolean rotateClockwise;
+
     /**
      * Class constructor
      * @param message The message to send
@@ -27,13 +30,28 @@ public class MessagePayload {
         this.position = position;
         this.player = player;
         this.miniBoardHelper = miniBoardHelper;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
     }
+
+    public MessagePayload(String message, Position position, Player player) {
+        this.message = message;
+        this.board = null;
+        this.position = position;
+        this.player = player;
+        this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
+    }
+
     public MessagePayload(String message, MiniBoardHelper miniBoardHelper) {
         this.message = message;
         this.board = null;
         this.position = null;
         this.player = null;
         this.miniBoardHelper = miniBoardHelper;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
     }
     public MessagePayload(String message) {
         this.message = message;
@@ -41,6 +59,8 @@ public class MessagePayload {
         this.position = null;
         this.player = null;
         this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
     }
     public MessagePayload(String message, Board board) {
         this.message = message;
@@ -48,6 +68,8 @@ public class MessagePayload {
         this.position = null;
         this.player = null;
         this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
     }
 
     public MessagePayload(String message, Player player) {
@@ -56,6 +78,8 @@ public class MessagePayload {
         this.position = null;
         this.player = player;
         this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
     }
 
     public MessagePayload(String message, Position position) {
@@ -64,6 +88,18 @@ public class MessagePayload {
         this.position = position;
         this.player = null;
         this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
+    }
+
+    public MessagePayload(String message, int rotateSection, boolean rotateClockwise) {
+        this.message = message;
+        this.board = null;
+        this.position = null;
+        this.player = null;
+        this.miniBoardHelper = null;
+        this.rotateSection = rotateSection;
+        this.rotateClockwise = rotateClockwise;
     }
 
     /**
@@ -102,6 +138,14 @@ public class MessagePayload {
         return new MessagePayload(printOut, position, player, miniBoardHelper);
     }
 
+    public static MessagePayload createMessagePayload(String printOut, Position position, Player player) {
+        return new MessagePayload(printOut, position, player);
+    }
+
+    public static MessagePayload createMessagePayload(String printOut, int section, boolean clockwise) {
+        return new MessagePayload(printOut, section, clockwise);
+    }
+
     public static MessagePayload createMessagePayload(String printOut, Player player) {
         return new MessagePayload(printOut, player);
     }
@@ -134,5 +178,13 @@ public class MessagePayload {
 
     public MiniBoardHelper getMiniBoardHelper() {
         return this.miniBoardHelper;
+    }
+
+    public int getRotateSection() {
+        return this.rotateSection;
+    }
+
+    public boolean getRotateClockwise() {
+        return this.rotateClockwise;
     }
 }

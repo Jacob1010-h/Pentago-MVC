@@ -54,7 +54,8 @@ public class Model implements MessageHandler {
             case "makeMove" -> {
                 miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
                 board.copyBoard(miniBoardHelper); // requires miniBoardHelper
-                board.printBoard();
+                // board.printBoard();
+                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", position, player));
                 player.switchPlayer();
             }
             case "playerMove" -> {
@@ -73,7 +74,7 @@ public class Model implements MessageHandler {
                 }
             }
             case "rotate" -> {
-
+                
             }
         }
     }
