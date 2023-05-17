@@ -13,12 +13,15 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     private boolean isRotate = false;
     private final Messenger mvcMessaging;
+
     public GamePanel(Messenger mvcMessaging) {
         this.mvcMessaging = mvcMessaging;
         this.init();
     }
 
     public void init() {
+        this.mvcMessaging.subscribe("setIcon", this);
+        this.mvcMessaging.subscribe("rotate", this);
         this.setTitle("Pentagowo");
         // set this icon image to the pentago logo
         this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
@@ -34,8 +37,26 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     }
 
     @Override
-    public void messageHandler(String s, Object o) {
+    public void messageHandler(String messageString, Object messagePayload) {
+        MessagePayload payload = (MessagePayload) messagePayload;
+        String message = payload.getMessage();
+        Position position = payload.getPosition();
+        Player player = payload.getPlayer();
 
+        if (message != null) {
+            System.out.println("MSG: received by model: " + message + " | " + messagePayload.toString());
+        } else {
+            System.out.println("MSG: received by model: " + message + " | No data sent");
+        }
+        switch (payload.getMessage()) {
+//            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
+            case "setIcon" -> {
+                this.setCell(position.getRow()+2, position.getCol()+2, player.getColor());
+            }
+            case "rotate" -> {
+                this.rotateSection(payload.getRotateSection(), payload.getRotateClockwise());
+            }
+        }
     }
 
     public void createBoard() {
@@ -60,7 +81,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                         cells[i][j].setBackground(Color.decode("#e49e77"));
                     }
                 }
-                // cells[i][j].setText(i + ", " + j);
+                // cells[i][j].setText( i + ", " + j);
                 cells[i][j].setPreferredSize(new Dimension(80, 80));
                 cells[i][j].setOpaque(true);
                 cells[i][j].setVisible(true);
@@ -108,23 +129,55 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         int cellSize = Constants.WINDOW_HEIGHT/10;
         if (isRotate) {
             System.out.println("rotate");
-            isRotate = false;
-            handleIcons();
+            row = y/cellSize;
+            col = x/cellSize;
+            System.out.println("row: " + row + " Col: " + col);
+            if (validRotate(row, col)) {
+                isRotate = false;
+                handleIcons();
+                mvcMessaging.notify("rotate", MessagePayload.createMessagePayload("rotate", getRotateSection(new Position(row, col)), getRotateClockwise(new Position(row, col))));
+            }
             return;
         }
-        isRotate = true;
-        if (outOfBounds(x, y)) {
+        if (outOfBounds(x, y) && !isRotate) {
             System.out.println("yo ass is out of bounds");
             return;
         }
-        handleIcons();
         x -= Constants.X_LEFT;
         y -= (Constants.Y_TOP + Constants.BLANK_TOP_SPACE);
         row = y/cellSize;
         col = x/cellSize;
         System.out.println("row: " + row + "Col: " + col);
+        isRotate = true;
+        handleIcons();
         mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", new Position(row, col)));
 
+    }
+
+    private boolean getRotateClockwise(Position pos) {
+        return (pos.equals(1,6) || 
+                pos.equals(3,1) ||
+                pos.equals(8,3) ||
+                pos.equals(6,8));
+    }
+
+    private int getRotateSection(Position pos) {
+        int row = pos.getRow();
+        int col = pos.getCol();
+
+        if (row == 1 && col == 3 || row == 3 && col == 1) {
+            return 1;
+        }
+        if (row == 1 && col == 6 || row == 3 && col == 8) {
+            return 2;
+        }
+        if (row == 6 && col == 1 || row == 8 && col == 3) {
+            return 3;
+        }
+        if (row == 6 && col == 8 || row == 8 && col == 6) {
+            return 4;
+        }
+        throw new IllegalArgumentException("Invalid cell coordinates: (" + row + ", " + col + ")");
     }
 
     private void handleIcons() {
@@ -148,12 +201,109 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
             cells[8][6].setIcon(null);
             cells[6][8].setIcon(null);
         }
-        // update the graphics
-        this.repaint();
+    }
+
+    /**
+     * Rotates the section of the board that was clicked, 
+     * clockwise or counterclockwise depending on the boolean
+     * @param clockwise true if clockwise, false if counterclockwise rotation
+     * @param section the section of the board that was clicked
+     */
+    private void rotateSection(int section, boolean clockwise) {
+        int rowStart, colStart;
+        switch (section) {
+            case 1:
+                rowStart = 2+0;
+                colStart = 2+0;
+                break;
+            case 2:
+                rowStart = 2+0;
+                colStart = 2+3;
+                break;
+            case 3:
+                rowStart = 2+3;
+                colStart = 2+0;
+                break;
+            case 4:
+                rowStart = 2+3;
+                colStart = 2+3;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid section number: " + section);
+        }
+        System.out.println(rowStart + " aaand " + colStart );
+        int[][] sectionValues = new int[3][3];
+        
+        // Copy the values of the section into a 2D array
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                sectionValues[i][j] = cells[rowStart + i][colStart + j].getValue();
+                setCell(rowStart+i, colStart+j, 0);
+            }
+        }
+        
+        // Rotate the section in a clockwise or counterclockwise direction
+        if (clockwise) {
+            for (int i = 0; i < 3 / 2; i++) {
+                for (int j = i; j < 3 - i - 1; j++) {
+                    int temp = sectionValues[i][j];
+                    sectionValues[i][j] = sectionValues[3 - j - 1][i];
+                    sectionValues[3 - j - 1][i] = sectionValues[3 - i - 1][3 - j - 1];
+                    sectionValues[3 - i - 1][3 - j - 1] = sectionValues[j][3 - i - 1];
+                    sectionValues[j][3 - i - 1] = temp;
+                }
+            }
+        } else {
+            for (int i = 0; i < 3 / 2; i++) {
+                for (int j = i; j < 3 - i - 1; j++) {
+                    int temp = sectionValues[i][j];
+                    sectionValues[i][j] = sectionValues[j][3 - i - 1];
+                    sectionValues[j][3 - i - 1] = sectionValues[3 - i - 1][3 - j - 1];
+                    sectionValues[3 - i - 1][3 - j - 1] = sectionValues[3 - j - 1][i];
+                    sectionValues[3 - j - 1][i] = temp;
+                }
+            }
+        }
+        
+        // Copy the rotated values back into the cells
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                setCell(i+rowStart, j+colStart, sectionValues[i][j]);
+            }
+        }
+    }
+
+    private void setCell(int row, int col, int color) {
+        switch (color)
+        {
+            case 1: 
+                cells[row][col].setIcon(new ImageIcon("src/game/images/green.png"));
+                cells[row][col].setValue(color);
+                break;
+            case -1: 
+                cells[row][col].setIcon(new ImageIcon("src/game/images/blue.png"));
+                cells[row][col].setValue(color);
+                break;
+            default: 
+                cells[row][col].setIcon(null);
+                cells[row][col].setValue(color);
+                break;
+        }
     }
 
     public boolean outOfBounds(int x, int y) {
-        return x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM;
+        return (x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM);
+    }
+
+    public boolean validRotate(int row, int col) {
+        return  (row == 1 && col == 3) ||
+                (row == 3 && col == 1) ||
+                (row == 1 && col == 6) ||
+                (row == 3 && col == 8) ||
+                (row == 6 && col == 1) ||
+                (row == 8 && col == 3) ||
+                (row == 8 && col == 6) ||
+                (row == 6 && col == 8);
     }
 
     @Override
