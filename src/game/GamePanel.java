@@ -80,7 +80,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 cells[i][j] = new BoardCell();
                 // check if the cell is on the outside of the board
                 if (i < 2 || i > 7 || j < 2 || j > 7) {
-                    cells[i][j].setBackground(Color.decode("#dad9b5"));
+                    cells[i][j].setIcon(new ImageIcon("src/game/images/felt.png"));
                 }
                 else {
                     handleBorders(i, j);
@@ -212,14 +212,14 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
             cells[6][8].setIcon(new ImageIcon("src/game/images/downLeft.png"));
         }
         else {
-            cells[1][3].setIcon(null);
-            cells[3][1].setIcon(null);
-            cells[1][6].setIcon(null);
-            cells[3][8].setIcon(null);
-            cells[6][1].setIcon(null);
-            cells[8][3].setIcon(null);
-            cells[8][6].setIcon(null);
-            cells[6][8].setIcon(null);
+            cells[1][3].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[3][1].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[1][6].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[3][8].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[6][1].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[8][3].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[8][6].setIcon(new ImageIcon("src/game/images/felt.png"));
+            cells[6][8].setIcon(new ImageIcon("src/game/images/felt.png"));
         }
     }
 
