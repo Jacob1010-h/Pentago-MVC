@@ -54,11 +54,13 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         switch (payload.getMessage()) {
 //            case "gameOverUpdate" -> this.gameOver = this.board.isWinner() != null;
             case "setIcon" -> {
-                updateBoard(board);
+                updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
             }
             case "gameOver" -> {
                 gameOver(payload.getWinner());
-                updateBoard(payload.getBoard());
+                updateBoard(payload.getBoard(), player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
+                isRotate = false;
+                handleIcons();
             }
             case "invalidMove" -> {
                 this.isRotate = false;
@@ -83,14 +85,14 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                     cells[i][j].setIcon(new ImageIcon("src/game/images/felt.png"));
                 }
                 else {
-                    handleBorders(i, j);
+                    handleBorders(i, j, Color.WHITE);
                     if ((i > 4 && j < 5) || (i < 5 && j > 4)) {
                         cells[i][j].setIcon(new ImageIcon("src/game/images/blankSquare.png"));
                     } else {
                         cells[i][j].setIcon(new ImageIcon("src/game/images/blankSquare.png"));
                     }
                 }
-                // cells[i][j].setText( i + ", " + j);
+                // cells[i][j].setText( i + ", " + j); cells[i][j].setIcon(null);
                 cells[i][j].setPreferredSize(new Dimension(80, 80));
                 cells[i][j].setOpaque(true);
                 cells[i][j].setVisible(true);
@@ -102,14 +104,16 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         this.setVisible(true);
     }
 
-    public void updateBoard(Board board) {
+    public void updateBoard(Board board, Color color) {
         for (int i = 2; i < 8; i++) {
             for (int j = 2; j < 8; j++) {
                 setCell(i, j, board.getBoard()[i - 2][j - 2].getValue());
+                handleBorders(i, j, color);
             }
         }
     }
-    private void handleBorders(int i, int j) {
+    
+    private void handleBorders(int i, int j, Color color) {
         int top = 1;
         int left = 1;
         int bottom = 1;
@@ -136,7 +140,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
             bottom = i == 4 ? increment : bottom;
             right = j == 4 ? increment : right;
         }
-        cells[i][j].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.WHITE));
+        cells[i][j].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, color));
     }
 
     public void handleClick(int x, int y) {
@@ -174,27 +178,37 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         Player player = new Player(winner);
         JOptionPane.showMessageDialog(null, player.toString() + " WINS!!!");
     }
+
+    public boolean validRotate(int row, int col) {
+        return ((row == 1 && col >= 2 && col <= 4) || (row >= 2 && row <= 4 && col == 1) ||
+                (row == 1 && col >= 5 && col <= 7) || (row >= 2 && row <= 4 && col == 8) ||
+                (row == 8 && col >= 5 && col <= 7) || (row >= 5 && row <= 7 && col == 1) ||
+                (row == 8 && col >= 2 && col <= 4) || (row >= 5 && row <= 7 && col == 8));
+    }
+
     private boolean getRotateClockwise(Position pos) {
-        return (pos.equals(1,6) || 
-                pos.equals(3,1) ||
-                pos.equals(8,3) ||
-                pos.equals(6,8));
+        int row = pos.getRow();
+        int col = pos.getCol();
+        return (row == 1 && (col >= 2 && col <= 4) || 
+                (row >= 2 && row <= 4) && col == 8 ||
+                (row >= 5 && row <= 7) && col == 1 ||
+                row == 8 && (col >= 5 && col <= 7));
     }
 
     private int getRotateSection(Position pos) {
         int row = pos.getRow();
         int col = pos.getCol();
 
-        if (row == 1 && col == 3 || row == 3 && col == 1) {
+        if (row == 1 && (col >= 2 && col <= 4) || (row >= 2 && row <= 4) && col == 1) {
             return 1;
         }
-        if (row == 1 && col == 6 || row == 3 && col == 8) {
+        if (row == 1 && (col >= 5 && col <= 7) || (row >= 2 && row <= 4) && col == 8) {
             return 2;
         }
-        if (row == 6 && col == 1 || row == 8 && col == 3) {
+        if (row == 8 && (col >= 2 && col <= 4) || (row >= 5 && row <= 7) && col == 1) {
             return 3;
         }
-        if (row == 6 && col == 8 || row == 8 && col == 6) {
+        if (row == 8 && (col >= 5 && col <= 7) || (row >= 5 && row <= 7) && col == 8) {
             return 4;
         }
         throw new IllegalArgumentException("Invalid cell coordinates: (" + row + ", " + col + ")");
@@ -202,14 +216,14 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     private void handleIcons() {
         if (isRotate) {
-            cells[1][3].setIcon(new ImageIcon("src/game/images/leftDown.png"));
-            cells[3][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
-            cells[1][6].setIcon(new ImageIcon("src/game/images/rightDown.png"));
-            cells[3][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
-            cells[6][1].setIcon(new ImageIcon("src/game/images/downRight.png"));
-            cells[8][3].setIcon(new ImageIcon("src/game/images/leftUp.png"));
-            cells[8][6].setIcon(new ImageIcon("src/game/images/rightUp.png"));
-            cells[6][8].setIcon(new ImageIcon("src/game/images/downLeft.png"));
+            cells[1][3].setIcon(new ImageIcon("src/game/images/rightDown.png"));
+            cells[3][1].setIcon(new ImageIcon("src/game/images/downRight.png"));
+            cells[1][6].setIcon(new ImageIcon("src/game/images/leftDown.png"));
+            cells[3][8].setIcon(new ImageIcon("src/game/images/downLeft.png"));
+            cells[6][1].setIcon(new ImageIcon("src/game/images/upRight.png"));
+            cells[8][3].setIcon(new ImageIcon("src/game/images/rightUp.png"));
+            cells[8][6].setIcon(new ImageIcon("src/game/images/leftUp.png"));
+            cells[6][8].setIcon(new ImageIcon("src/game/images/upLeft.png"));
         }
         else {
             cells[1][3].setIcon(new ImageIcon("src/game/images/felt.png"));
@@ -243,17 +257,6 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
 
     public boolean outOfBounds(int x, int y) {
         return (x >= Constants.X_RIGHT || x <= Constants.X_LEFT || y <= Constants.Y_TOP || y >= Constants.Y_BOTTOM);
-    }
-
-    public boolean validRotate(int row, int col) {
-        return  (row == 1 && col == 3) ||
-                (row == 3 && col == 1) ||
-                (row == 1 && col == 6) ||
-                (row == 3 && col == 8) ||
-                (row == 6 && col == 1) ||
-                (row == 8 && col == 3) ||
-                (row == 8 && col == 6) ||
-                (row == 6 && col == 8);
     }
 
     @Override

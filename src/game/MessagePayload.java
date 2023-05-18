@@ -80,11 +80,33 @@ public class MessagePayload {
         this.winner = 0;
     }
 
+    public MessagePayload(String message, Board board, Player player) {
+        this.message = message;
+        this.board = board;
+        this.position = null;
+        this.player = player;
+        this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
+        this.winner = 0;
+    }
+
     public MessagePayload(String message, int winner, Board board) {
         this.message = message;
         this.board = board;
         this.position = null;
         this.player = null;
+        this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
+        this.winner = winner;
+    }
+
+    public MessagePayload(String message, int winner, Board board, Player player) {
+        this.message = message;
+        this.board = board;
+        this.position = null;
+        this.player = player;
         this.miniBoardHelper = null;
         this.rotateSection = -1;
         this.rotateClockwise = false;
@@ -144,6 +166,10 @@ public class MessagePayload {
         return new MessagePayload(printOut, board);
     }
 
+    public static MessagePayload createMessagePayload(String printOut, Board board, Player player){
+        return new MessagePayload(printOut, board, player);
+    }
+
     /**
      * This function creates a new MessagePayload object with the given printOut and position parameters.
      *
@@ -171,12 +197,17 @@ public class MessagePayload {
     public static MessagePayload createMessagePayload(String printOut, Player player) {
         return new MessagePayload(printOut, player);
     }
+    
     public static MessagePayload createMessagePayload(String printOut, Position position) {
         return new MessagePayload(printOut, position);
     }
 
     public static MessagePayload createMessagePayload(String printOut, int winner, Board board) {
         return new MessagePayload(printOut, winner, board);
+    }
+
+    public static MessagePayload createMessagePayload(String printOut, int winner, Board board, Player player) {
+        return new MessagePayload(printOut, winner, board, player);
     }
 
     /**

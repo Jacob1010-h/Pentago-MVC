@@ -59,9 +59,16 @@ public class Model implements MessageHandler {
                     miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
                     board.copyBoard(miniBoardHelper); // requires miniBoardHelper
                     // board.printBoard();
-                    this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
+                    this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board, player));
                     player.switchPlayer();
                     board.printBoard();
+                    if (this.board.isWinner() == Constants.WHITE) {
+                        this.newGame();
+                        this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board, player));
+                    } else if (this.board.isWinner() == Constants.BLACK) {
+                        this.newGame();
+                        this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board, player));
+                    }
                 }
                 else {
                     System.out.println("Invalid move");
@@ -81,14 +88,15 @@ public class Model implements MessageHandler {
                 }
                 this.board.copyBoard(this.miniBoardHelper);
                 board.printBoard();
-                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board));
-
+                this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board, player));
                 if (this.board.isWinner() == Constants.WHITE) {
                     this.newGame();
-                    this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board));
+                    this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board, player));
                 } else if (this.board.isWinner() == Constants.BLACK) {
                     this.newGame();
-                    this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board));
+                    this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board, player));
+                } else {
+                    this.mvcMessaging.notify("changeBorder", MessagePayload.createMessagePayload("changeBorder", player));
                 }
             }
         }
