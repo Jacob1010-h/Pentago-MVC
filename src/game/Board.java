@@ -142,34 +142,42 @@ public class Board {
         }
 
         // check diagonals
-        for (int i = 0; i < Constants.BOARD_SIZE; i++) {
-            countW1 = 0;
-            countW2 = 0;
-            countB1 = 0;
-            countB2 = 0;
-            for (int j = 0; j < Constants.BOARD_SIZE; j++) {
-                if (i + j < Constants.BOARD_SIZE) {
-                    // if the player is white, check for 5 white pieces in a diagonal (top left to bottom right)
-                    countW1 = (this.board[i + j][j].getValue() == Constants.WHITE) ? countW1 + 1 : 0;
-                    if (countW1 == 5)
-                        return Constants.WHITE;
+        for (int i = 0; i <= Constants.BOARD_SIZE - 5; i++) {
+            for (int j = 0; j <= Constants.BOARD_SIZE - 5; j++) {
+                boolean found = true;
+                int current = this.board[i][j].getValue();
+                if (current == 0)
+                    continue;
 
-                    // if the player is black, check for 5 black pieces in a diagonal (top left to bottom right)
-                    countB1 = (this.board[i + j][j].getValue() == Constants.BLACK) ? countB1 + 1 : 0;
-                    if (countB1 == 5)
-                        return Constants.BLACK;
+                for (int k = 1; k < 5; k++) {
+                    if (this.board[i + k][j + k].getValue() != current) {
+                        found = false;
+                        break;
+                    }
                 }
-                if (Constants.BOARD_SIZE -1 - i - j >= 0) {
-                    // if the player is white, check for 5 white pieces in a diagonal (top right to bottom left)
-                    countW2 = (this.board[j][Constants.BOARD_SIZE - 1 - i - j].getValue() == Constants.WHITE) ? countW2 + 1 : 0;
-                    if (countW2 == 5)
-                        return Constants.WHITE;
 
-                    // if the player is black, check for 5 black pieces in a diagonal (top right to bottom left)
-                    countB2 = (this.board[j][Constants.BOARD_SIZE - 1 - i - j].getValue() == Constants.BLACK) ? countB2 + 1 : 0;
-                    if (countB2 == 5)
-                        return Constants.BLACK;
+                if (found)
+                    return current;
+            }
+        }
+
+        // Check diagonals from right to left
+        for (int i = 0; i <= Constants.BOARD_SIZE - 5; i++) {
+            for (int j = 5; j < Constants.BOARD_SIZE; j++) {
+                boolean found = true;
+                int current = this.board[i][j].getValue();
+                if (current == 0)
+                    continue;
+
+                for (int k = 1; k < 5; k++) {
+                    if (this.board[i + k][j - k].getValue() != current) {
+                        found = false;
+                        break;
+                    }
                 }
+
+                if (found)
+                    return current;
             }
         }
 
