@@ -1,8 +1,6 @@
 package game;
 import com.mrjaffesclass.apcs.messenger.*;
 
-import javax.swing.*;
-
 /**
  *
  * The Controller is the master of the App you're writing. It instantiates the
