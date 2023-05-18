@@ -22,9 +22,9 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void init() {
         this.mvcMessaging.subscribe("setIcon", this);
         this.mvcMessaging.subscribe("gameOver", this);
-        this.setTitle("Pentagohno");
         this.mvcMessaging.subscribe("invalidMove", this);
-        this.setTitle("Pentagowo");
+        this.mvcMessaging.subscribe("setRotate", this);
+        this.setTitle("Pentagohno");
         // set this icon image to the pentago logo
         this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,6 +45,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         Position position = payload.getPosition();
         Player player = payload.getPlayer();
         Board board = payload.getBoard();
+        boolean isRotate = payload.getRotate();
 
         if (message != null) {
             System.out.println("MSG: received by model: " + message + " | " + messagePayload.toString());
@@ -59,11 +60,15 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
             case "gameOver" -> {
                 gameOver(payload.getWinner());
                 updateBoard(payload.getBoard(), player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
-                isRotate = false;
+                isRotate = !Constants.ROTATE_MODE;
                 handleIcons();
             }
             case "invalidMove" -> {
                 this.isRotate = false;
+                handleIcons();
+            }
+            case "setRotate" -> {
+                this.isRotate = isRotate;
                 handleIcons();
             }
         }
@@ -156,10 +161,10 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 isRotate = false;
                 handleIcons();
                 mvcMessaging.notify("rotate", MessagePayload.createMessagePayload("rotate", getRotateSection(new Position(row, col)), getRotateClockwise(new Position(row, col))));
+                return;
             }
-            return;
         }
-        if (outOfBounds(x, y) && !isRotate) {
+        if (outOfBounds(x, y)) {
             System.out.println("yo ass is out of bounds");
             return;
         }
@@ -167,11 +172,13 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         y -= (Constants.Y_TOP);
         row = y / cellSize;
         col = x / cellSize;
-        System.out.println("row: " + row + "col: " + col);
-        isRotate = true;
-        handleIcons();
-        mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", new Position(row, col)));
-
+        System.out.println("row: " + row + " col: " + col + " " + isRotate);
+        if (isRotate) {
+            mvcMessaging.notify("movePiece", MessagePayload.createMessagePayload("movePiece", new Position(row, col)));            
+        }
+        else {
+            mvcMessaging.notify("makeMove", MessagePayload.createMessagePayload("makeMove", new Position(row, col)));
+        }
     }
 
     public void gameOver(int winner) {

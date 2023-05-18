@@ -2,6 +2,7 @@ package game;
 
 public class MiniBoardHelper {
     private MiniBoard[] miniBoards;
+    private Position lastMove;
 
     public MiniBoardHelper(MiniBoard[] miniBoardHelper){
         this.miniBoards = miniBoardHelper;
@@ -42,6 +43,7 @@ public class MiniBoardHelper {
     public void makeMove(Player player, int row, int col) {
         int miniBoardIndex = getMiniBoardIndex(row, col);
         System.out.println(miniBoardIndex);
+        this.lastMove = new Position(row, col);
         if (miniBoardIndex == 1 || miniBoardIndex == 3) {
             col -= 3;
         }
@@ -53,6 +55,16 @@ public class MiniBoardHelper {
 
     public int getMiniBoardIndex(int row, int col) {
         return ((row/3) * 2 + (col / 3));
+    }
+
+
+    /**
+     * The getLastMove function returns the last move that was made on the board.
+     *
+     * @return the last move that was made on the board
+     */
+    public Position getLastMove() {
+        return this.lastMove;
     }
 
 

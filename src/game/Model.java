@@ -6,10 +6,10 @@ import com.mrjaffesclass.apcs.messenger.Messenger;
 public class Model implements MessageHandler {
     private final Messenger mvcMessaging;
 
-    private boolean gameOver;
     private Board board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
     private MiniBoardHelper miniBoardHelper = new MiniBoardHelper(new MiniBoard[Constants.MINI_BOARD_AMOUNT]);
     private Player player = new Player(Constants.WHITE);
+    
     public Model(Messenger mvcMessaging) {
         this.mvcMessaging = mvcMessaging;
         this.init();
@@ -22,6 +22,7 @@ public class Model implements MessageHandler {
         this.mvcMessaging.subscribe("whoseMoveUpdate", this);
         this.mvcMessaging.subscribe("gameOverUpdate", this);
         this.mvcMessaging.subscribe("makeMove", this);
+        this.mvcMessaging.subscribe("movePiece", this);
         this.mvcMessaging.subscribe("playerMove", this);
         this.mvcMessaging.subscribe("rotate", this);
         System.out.println("model init");
@@ -30,7 +31,6 @@ public class Model implements MessageHandler {
 
     private void newGame() {
         this.player.setColor(Constants.WHITE);
-        this.gameOver = false;
         this.board = new Board(new BoardCell[Constants.BOARD_SIZE][Constants.BOARD_SIZE]);
         this.miniBoardHelper = new MiniBoardHelper(new MiniBoard[Constants.MINI_BOARD_AMOUNT]);
         this.board.copyBoard(this.miniBoardHelper);
@@ -60,8 +60,33 @@ public class Model implements MessageHandler {
                     board.copyBoard(miniBoardHelper); // requires miniBoardHelper
                     // board.printBoard();
                     this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board, player));
-                    player.switchPlayer();
-                    board.printBoard();
+                    // board.printBoard();
+                    if (this.board.isWinner() == Constants.WHITE) {
+                        this.newGame();
+                        this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board, player));
+                    } else if (this.board.isWinner() == Constants.BLACK) {
+                        this.newGame();
+                        this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board, player));
+                    }
+                    else {
+                        this.mvcMessaging.notify("setRotate", MessagePayload.createMessagePayload("setRotate", Constants.ROTATE_MODE));
+                    }
+                }
+                else {
+                    System.out.println("Invalid move");
+                    mvcMessaging.notify("invalidMove", MessagePayload.createMessagePayload(("invalidMove")));
+                }
+
+            }
+            case "movePiece" -> {
+                if (this.board.getCell(position.getRow(), position.getCol()).getValue() == Constants.EMPTY) {
+                    miniBoardHelper.makeMove(new Player(Constants.EMPTY), miniBoardHelper.getLastMove().getRow(), miniBoardHelper.getLastMove().getCol()); // requires miniBoardHelper, player, and position
+                    miniBoardHelper.makeMove(player, position.getRow(), position.getCol()); // requires miniBoardHelper, player, and position
+                    board.copyBoard(miniBoardHelper); // requires miniBoardHelper
+                    // board.printBoard();
+                    this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board, player));
+
+                    // board.printBoard();
                     if (this.board.isWinner() == Constants.WHITE) {
                         this.newGame();
                         this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board, player));
@@ -88,7 +113,9 @@ public class Model implements MessageHandler {
                 }
                 this.board.copyBoard(this.miniBoardHelper);
                 board.printBoard();
+                player.switchPlayer();
                 this.mvcMessaging.notify("setIcon", MessagePayload.createMessagePayload("setIcon", board, player));
+                this.mvcMessaging.notify("setRotate", MessagePayload.createMessagePayload("setRotate", !Constants.ROTATE_MODE));
                 if (this.board.isWinner() == Constants.WHITE) {
                     this.newGame();
                     this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.WHITE, board, player));

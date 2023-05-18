@@ -19,6 +19,7 @@ public class MessagePayload {
 
     private final int rotateSection;
     private final boolean rotateClockwise;
+    private final boolean isRotate;
     private final int winner;
 
     /**
@@ -36,6 +37,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, Position position, Player player) {
@@ -47,6 +49,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, MiniBoardHelper miniBoardHelper) {
@@ -58,6 +61,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
     public MessagePayload(String message) {
         this.message = message;
@@ -68,6 +72,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
     public MessagePayload(String message, Board board) {
         this.message = message;
@@ -78,6 +83,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, Board board, Player player) {
@@ -89,6 +95,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, int winner, Board board) {
@@ -100,6 +107,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = winner;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, int winner, Board board, Player player) {
@@ -111,6 +119,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = winner;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, Player player) {
@@ -122,6 +131,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, Position position) {
@@ -133,6 +143,7 @@ public class MessagePayload {
         this.rotateSection = -1;
         this.rotateClockwise = false;
         this.winner = 0;
+        this.isRotate = false;
     }
 
     public MessagePayload(String message, int rotateSection, boolean rotateClockwise) {
@@ -144,6 +155,19 @@ public class MessagePayload {
         this.rotateSection = rotateSection;
         this.rotateClockwise = rotateClockwise;
         this.winner = 0;
+        this.isRotate = false;
+    }
+
+    public MessagePayload(String message, boolean isRotate) {
+        this.message = message;
+        this.board = null;
+        this.position = null;
+        this.player = null;
+        this.miniBoardHelper = null;
+        this.rotateSection = -1;
+        this.rotateClockwise = false;
+        this.winner = 0;
+        this.isRotate = isRotate;
     }
 
     /**
@@ -156,6 +180,10 @@ public class MessagePayload {
      */
     public static MessagePayload createMessagePayload(String printOut) {
         return new MessagePayload(printOut);
+    }
+
+    public static MessagePayload createMessagePayload(String printOut, boolean isRotate) {
+        return new MessagePayload(printOut, isRotate);
     }
 
     public static MessagePayload createMessagePayload(String printOut, MiniBoardHelper miniBoardHelper) {
@@ -231,6 +259,10 @@ public class MessagePayload {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    public boolean getRotate() {
+        return this.isRotate;
     }
 
     public MiniBoardHelper getMiniBoardHelper() {
