@@ -46,6 +46,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         Player player = payload.getPlayer();
         Board board = payload.getBoard();
         boolean isRotate = payload.getRotate();
+        int winner = payload.getWinner();
 
         if (message != null) {
             System.out.println("MSG: received by model: " + message + " | " + messagePayload.toString());
@@ -58,8 +59,8 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
             }
             case "gameOver" -> {
-                gameOver(payload.getWinner());
-                updateBoard(payload.getBoard(), player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
+                gameOver(winner);
+                updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
                 isRotate = !Constants.ROTATE_MODE;
                 handleIcons();
             }
