@@ -58,7 +58,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
             }
             case "gameOver" -> {
                 gameOver(payload.getWinner());
-                updateBoard(payload.getBoard(), player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
+                updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
                 isRotate = false;
                 handleIcons();
             }
