@@ -1,17 +1,14 @@
 package game;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 public class Test {
 
 
     public static void main(String[] args) {
-        // two to the power of 63
-        long num = (2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L *  2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L );
-        Trinary t = new Trinary(num);
-        System.out.println(t.getValue());
-        t.toTrinary();
-        System.out.println(t.getValue());
-
+        Trinary t = new Trinary(BigInteger.valueOf(12));
+        System.out.println(t.toDecimal());
+        System.out.println(t.toTrinary());
     }
 }
