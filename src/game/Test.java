@@ -6,10 +6,12 @@ public class Test {
 
 
     public static void main(String[] args) {
-        Trinary t = new Trinary(12212);
-        t.setValue(toTrinary(12212);
-        System.out.println(t.toDecimal(12212));
-        System.out.println(t.toTrinary(12212);
+        // two to the power of 63
+        long num = (2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L *  2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L * 2L );
+        Trinary t = new Trinary(num);
+        System.out.println(t.getValue());
+        t.toTrinary();
+        System.out.println(t.getValue());
 
     }
 }
