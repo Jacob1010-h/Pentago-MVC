@@ -3,8 +3,10 @@ package game;
 public class Board {
     private BoardCell[][] board;
 
+    private int moveCount;
     public Board(BoardCell[][] board) {
         this.board = board;
+        this.moveCount = 0;
         initBoard();
     }
 
@@ -103,6 +105,9 @@ public class Board {
         }
     }
 
+    public boolean isTie() {
+        return moveCount >= Constants.MAX_MOVE_COUNT;
+    }
     // The player must have 5 pieces in a row to win
     public int isWinner() {
         int countW1, countW2, countB1, countB2;
@@ -181,7 +186,12 @@ public class Board {
             }
         }
 
+
         // if the player has no winning rows, columns, or diagonals, return false
         return Constants.EMPTY;
+    }
+    public void incrementMoveCount() {
+        this.moveCount++;
+        System.out.println("Move count: " + this.moveCount);
     }
 }

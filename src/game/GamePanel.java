@@ -24,6 +24,7 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
         this.mvcMessaging.subscribe("gameOver", this);
         this.mvcMessaging.subscribe("invalidMove", this);
         this.mvcMessaging.subscribe("setRotate", this);
+        this.mvcMessaging.subscribe("isTie", this);
         this.setTitle("Pentagohno");
         // set this icon image to the pentago logo
         this.setIconImage(new ImageIcon("src\\game\\images\\icon2.png").getImage());
@@ -59,7 +60,15 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
             }
             case "gameOver" -> {
+
                 gameOver(winner);
+                updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
+                isRotate = !Constants.ROTATE_MODE;
+                handleIcons();
+            }
+            case "isTie" -> {
+
+                tieMessage();
                 updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
                 isRotate = !Constants.ROTATE_MODE;
                 handleIcons();
@@ -185,6 +194,10 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void gameOver(int winner) {
         Player player = new Player(winner);
         JOptionPane.showMessageDialog(null, player.toString() + " WINS!!!");
+    }
+
+    public void tieMessage() {
+        JOptionPane.showMessageDialog(null, "It's a tie :(");
     }
 
     public boolean validRotate(int row, int col) {

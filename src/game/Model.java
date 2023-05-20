@@ -67,7 +67,11 @@ public class Model implements MessageHandler {
                     } else if (this.board.isWinner() == Constants.BLACK) {
                         this.newGame();
                         this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board, player));
+                    } else if (this.board.isTie()) {
+                        this.newGame();
+                        this.mvcMessaging.notify("isTie", MessagePayload.createMessagePayload("isTie", player.getColor(), board, player));
                     }
+
                     else {
                         this.mvcMessaging.notify("setRotate", MessagePayload.createMessagePayload("setRotate", Constants.ROTATE_MODE));
                     }
@@ -93,13 +97,14 @@ public class Model implements MessageHandler {
                     } else if (this.board.isWinner() == Constants.BLACK) {
                         this.newGame();
                         this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board, player));
-                    }
-                }
-                else {
-                    System.out.println("Invalid move");
-                    mvcMessaging.notify("invalidMove", MessagePayload.createMessagePayload(("invalidMove")));
-                }
 
+
+                    } else {
+                        System.out.println("Invalid move");
+                        mvcMessaging.notify("invalidMove", MessagePayload.createMessagePayload(("invalidMove")));
+                    }
+
+                }
             }
             case "rotate" -> {
                 System.out.println();
@@ -125,6 +130,7 @@ public class Model implements MessageHandler {
                 } else {
                     this.mvcMessaging.notify("changeBorder", MessagePayload.createMessagePayload("changeBorder", player));
                 }
+                this.board.incrementMoveCount();
             }
         }
     }
