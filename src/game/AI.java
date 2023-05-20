@@ -16,10 +16,10 @@ public class AI extends Player{
         super(color);
     }
 
-    public Map getPosibleMoves(Trinary num) throws Exception {
+    public Map getPosibleMoves(Trinary num, boolean blackToMove) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(
-                        new URI("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toTrinary()))
+                        new URI("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toTrinary()+(!blackToMove ? "" : "m")))
                 .GET()
                 .build();
         java.net.http.HttpResponse<String> response = client.send(
