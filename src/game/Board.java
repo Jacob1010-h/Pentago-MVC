@@ -163,7 +163,7 @@ public class Board {
 
         // Check diagonals from right to left
         for (int i = 0; i <= Constants.BOARD_SIZE - 5; i++) {
-            for (int j = 5; j < Constants.BOARD_SIZE; j++) {
+            for (int j = 4; j < Constants.BOARD_SIZE; j++) {
                 boolean found = true;
                 int current = this.board[i][j].getValue();
                 if (current == 0)
