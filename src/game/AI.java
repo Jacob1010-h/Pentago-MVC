@@ -22,12 +22,13 @@ public class AI extends Player{
 
     public Map getPosibleMoves(BigInteger num, boolean blackToMove) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(
-                        new URI("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toString()+(!blackToMove ? "" : "m")))
-                .GET()
-                .headers("Accept-Encoding", "identity")
+        // http get request to the server
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toString()+(!blackToMove ? "" : "m")))
+                .setHeader("Accept-Encoding", "identity")
+                .POST(HttpRequest.BodyPublishers.ofString(""))
                 .build();
-        System.out.println(request.headers());
+
         java.net.http.HttpResponse<String> response = client.send(
                 request,
                 java.net.http.HttpResponse.BodyHandlers.ofString());
@@ -38,8 +39,7 @@ public class AI extends Player{
         JsonFactory factory = new JsonFactory();
         factory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
         ObjectMapper mapper = new ObjectMapper(factory);
-        // if the response is not a valid json, try to parse it again
-            return mapper.readValue(response, Map.class);
+        return mapper.readValue(response, Map.class);
 
     }
 }
