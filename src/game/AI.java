@@ -1,5 +1,9 @@
 package game;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigInteger;
@@ -7,6 +11,7 @@ import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.util.Map;
+import java.util.Optional;
 
 public class AI extends Player{
     public AI(int color){
@@ -28,7 +33,11 @@ public class AI extends Player{
     }
 
     private Map parseResponse(String response) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(response, Map.class);
+        JsonFactory factory = new JsonFactory();
+        factory.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES);
+        ObjectMapper mapper = new ObjectMapper(factory);
+        // if the response is not a valid json, try to parse it again
+            return mapper.readValue(response, Map.class);
+
     }
 }
