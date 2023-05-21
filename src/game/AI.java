@@ -1,14 +1,11 @@
 package game;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.math.BigInteger;
 import java.net.*;
-import java.io.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AI extends Player{
@@ -16,12 +13,14 @@ public class AI extends Player{
         super(color);
     }
 
-    public Map getPosibleMoves(Trinary num, boolean blackToMove) throws Exception {
+    public Map getPosibleMoves(BigInteger num, boolean blackToMove) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(
-                        new URI("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toTrinary()+(!blackToMove ? "" : "m")))
+                        new URI("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toString()+(!blackToMove ? "" : "m")))
                 .GET()
+                .headers("Accept-Encoding", "identity")
                 .build();
+        System.out.println(request.headers());
         java.net.http.HttpResponse<String> response = client.send(
                 request,
                 java.net.http.HttpResponse.BodyHandlers.ofString());
