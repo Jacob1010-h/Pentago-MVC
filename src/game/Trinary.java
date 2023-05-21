@@ -41,42 +41,23 @@ public class Trinary {
         return ret;
     }
 
-    public static int[][] numTo2dArray(BigInteger num) {
-        // The quadrant order is x-major: the first 16 bits are lower left, the next 16 bits are upper left, then lower right and upper right.
-        int[][] ret = new int[6][6];
+    public static int[][]  numTo2DIntArray(BigInteger num) {
+        int[][] ret = new int[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
         int[] numArray = numToIntArray(num);
-        int index = 0;
-        boolean bottomHalf = true;
-        // loop through the array, assigning digits from num into the 2d array
-        for (int row = 0; row < ret.length; row++) {
-            // bottom left
-            if (row < 3 && bottomHalf) {
-                for (int col = ret[row].length-1; col >= ret[row].length/2; col--) {
-                    ret[col][row] = numArray[index];
-                    index++;
-                }
-                if (row == 2) {
-                    bottomHalf = false;
-                    row = -1;
-                }
+        int index = 3;
+        for (int col = 0; col < Constants.BOARD_SIZE; col++) {
+            index -= 3;
+            if (col == 3) {
+                index -= 9;
             }
-            //top left / right
-            else if (!bottomHalf) {
-                for (int col = 0; col < ret[row].length/2; col++) {
-                    ret[col][row] = numArray[index];
-                    index++;
+            for (int row = 5; row >= 0; row--) {
+                if (row < 3) {
+                    ret[row][col] = numArray[index + 6];
                 }
-                if (row == ret.length - 1) {
-                    row = 2;
-                    bottomHalf = true;
+                else {
+                    ret[row][col] = numArray[index];
                 }
-            }
-            // bottom right
-            else {
-                for (int col = ret[row].length-1; col >= ret[row].length/2; col--) {
-                    ret[col][row] = numArray[index];
-                    index++;
-                }
+                index++;
             }
         }
         return ret;

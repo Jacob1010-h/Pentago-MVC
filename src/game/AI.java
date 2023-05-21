@@ -13,6 +13,8 @@ import java.net.http.HttpRequest;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.fasterxml.jackson.core.json.JsonReadFeature.ALLOW_UNESCAPED_CONTROL_CHARS;
+
 public class AI extends Player{
     public AI(int color){
         super(color);
