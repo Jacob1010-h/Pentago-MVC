@@ -18,6 +18,9 @@ public class AI extends Player{
     public Map getPosibleMoves(BigInteger num, boolean blackToMove) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         // http get request to the server
+        // if blackToMove is true this means that 'm' should be appended to the end of the url
+        // if there is a 'm' this means that the current player will rotate a marble next
+        System.out.println("Input: "+"https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toString()+(!blackToMove ? "" : "m"));
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://us-central1-naml-148801.cloudfunctions.net/pentago/"+num.toString()+(!blackToMove ? "" : "m")))
                 .setHeader("Accept-Encoding", "identity")
