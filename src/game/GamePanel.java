@@ -22,7 +22,6 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
     public void init() {
         this.mvcMessaging.subscribe("setIcon", this);
         this.mvcMessaging.subscribe("gameOver", this);
-        this.mvcMessaging.subscribe("invalidMove", this);
         this.mvcMessaging.subscribe("setRotate", this);
         this.mvcMessaging.subscribe("isTie", this);
         this.setTitle("Pentagohno");
@@ -71,10 +70,6 @@ public class GamePanel extends JFrame implements MessageHandler, MouseListener {
                 tieMessage();
                 updateBoard(board, player.getColor() == Constants.WHITE ? Color.WHITE : Color.BLACK);
                 isRotate = !Constants.ROTATE_MODE;
-                handleIcons();
-            }
-            case "invalidMove" -> {
-                this.isRotate = false;
                 handleIcons();
             }
             case "setRotate" -> {

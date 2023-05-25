@@ -78,7 +78,6 @@ public class Model implements MessageHandler {
                 }
                 else {
                     System.out.println("Invalid move");
-                    mvcMessaging.notify("invalidMove", MessagePayload.createMessagePayload(("invalidMove")));
                 }
 
             }
@@ -101,7 +100,6 @@ public class Model implements MessageHandler {
 
                     } else {
                         System.out.println("Invalid move");
-                        mvcMessaging.notify("invalidMove", MessagePayload.createMessagePayload(("invalidMove")));
                     }
 
                 }
