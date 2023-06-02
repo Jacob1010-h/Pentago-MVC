@@ -96,8 +96,6 @@ public class Model implements MessageHandler {
                     } else if (this.board.isWinner() == Constants.BLACK) {
                         this.newGame();
                         this.mvcMessaging.notify("gameOver", MessagePayload.createMessagePayload("gameOver", Constants.BLACK, board, player));
-
-
                     } else {
                         System.out.println("Invalid move");
                     }
